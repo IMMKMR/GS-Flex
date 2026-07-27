@@ -1,0 +1,3184 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GrowSphere™ FLEX — Interactive Product Simulator</title>
+    <meta
+      name="description"
+      content="Interactive simulator for GrowSphere™ FLEX Irrigation Fertigation Controller by Netafim"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ============================================
+   DESIGN SYSTEM — GrowSphere™ FLEX Simulator
+   ============================================ */
+      :root {
+        /* Colors */
+        --bg-primary: #0a0f1a;
+        --bg-secondary: #111827;
+        --bg-card: rgba(17, 24, 39, 0.7);
+        --bg-glass: rgba(255, 255, 255, 0.04);
+        --bg-glass-hover: rgba(255, 255, 255, 0.08);
+        --border-glass: rgba(255, 255, 255, 0.08);
+        --border-active: rgba(52, 211, 153, 0.4);
+
+        --text-primary: #f1f5f9;
+        --text-secondary: #94a3b8;
+        --text-muted: #64748b;
+
+        --accent-green: #34d399;
+        --accent-green-dim: rgba(52, 211, 153, 0.15);
+        --accent-blue: #60a5fa;
+        --accent-blue-dim: rgba(96, 165, 250, 0.15);
+        --accent-teal: #2dd4bf;
+        --accent-teal-dim: rgba(45, 212, 191, 0.15);
+        --accent-orange: #fb923c;
+        --accent-orange-dim: rgba(251, 146, 60, 0.15);
+        --accent-red: #f87171;
+        --accent-red-dim: rgba(248, 113, 113, 0.15);
+        --accent-purple: #a78bfa;
+        --accent-purple-dim: rgba(167, 139, 250, 0.15);
+        --accent-cyan: #22d3ee;
+
+        /* Gradients */
+        --gradient-green: linear-gradient(135deg, #34d399, #059669);
+        --gradient-blue: linear-gradient(135deg, #60a5fa, #3b82f6);
+        --gradient-teal: linear-gradient(135deg, #2dd4bf, #14b8a6);
+        --gradient-hero: linear-gradient(
+          135deg,
+          rgba(52, 211, 153, 0.1),
+          rgba(96, 165, 250, 0.05)
+        );
+
+        /* Shadows */
+        --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+        --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
+        --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
+        --shadow-glow-green: 0 0 20px rgba(52, 211, 153, 0.3);
+        --shadow-glow-blue: 0 0 20px rgba(96, 165, 250, 0.3);
+
+        /* Typography */
+        --font-heading: "Outfit", sans-serif;
+        --font-body: "Inter", sans-serif;
+
+        /* Spacing */
+        --radius-sm: 8px;
+        --radius-md: 12px;
+        --radius-lg: 16px;
+        --radius-xl: 24px;
+      }
+
+      /* ============================================
+   RESET & BASE
+   ============================================ */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: var(--font-body);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        min-height: 100vh;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* Background animated grid */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background:
+          radial-gradient(
+            ellipse 80% 60% at 50% 0%,
+            rgba(52, 211, 153, 0.06) 0%,
+            transparent 60%
+          ),
+          radial-gradient(
+            ellipse 60% 40% at 80% 100%,
+            rgba(96, 165, 250, 0.04) 0%,
+            transparent 50%
+          );
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* ============================================
+   HEADER / NAVBAR
+   ============================================ */
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        padding: 0 32px;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: rgba(10, 15, 26, 0.85);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--border-glass);
+      }
+
+      .navbar-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+      }
+
+      .navbar-logo {
+        width: 36px;
+        height: 36px;
+        background: var(--gradient-green);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+      }
+
+      .navbar-title {
+        font-family: var(--font-heading);
+        font-weight: 700;
+        font-size: 20px;
+        color: var(--text-primary);
+      }
+
+      .navbar-title span {
+        color: var(--accent-green);
+      }
+
+      .navbar-subtitle {
+        font-size: 11px;
+        color: var(--text-muted);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+
+      /* Tab Navigation */
+      .tab-nav {
+        display: flex;
+        gap: 4px;
+        background: rgba(255, 255, 255, 0.03);
+        padding: 4px;
+        border-radius: 12px;
+        border: 1px solid var(--border-glass);
+      }
+
+      .tab-btn {
+        font-family: var(--font-body);
+        font-size: 13px;
+        font-weight: 500;
+        padding: 8px 20px;
+        border: none;
+        border-radius: 8px;
+        background: transparent;
+        color: var(--text-secondary);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .tab-btn:hover {
+        background: var(--bg-glass-hover);
+        color: var(--text-primary);
+      }
+
+      .tab-btn.active {
+        background: var(--accent-green-dim);
+        color: var(--accent-green);
+        box-shadow: 0 0 12px rgba(52, 211, 153, 0.15);
+      }
+
+      .tab-btn .tab-icon {
+        font-size: 16px;
+      }
+
+      /* Live indicator */
+      .live-badge {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        color: var(--accent-green);
+        font-weight: 500;
+      }
+
+      .live-dot {
+        width: 8px;
+        height: 8px;
+        background: var(--accent-green);
+        border-radius: 50%;
+        animation: pulse-dot 2s ease-in-out infinite;
+      }
+
+      @keyframes pulse-dot {
+        0%,
+        100% {
+          opacity: 1;
+          box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.4);
+        }
+        50% {
+          opacity: 0.7;
+          box-shadow: 0 0 0 6px rgba(52, 211, 153, 0);
+        }
+      }
+
+      /* ============================================
+   MAIN CONTENT
+   ============================================ */
+      .main-content {
+        padding-top: 80px;
+        min-height: 100vh;
+        position: relative;
+        z-index: 1;
+      }
+
+      .tab-panel {
+        display: none;
+        animation: fadeInPanel 0.5s ease;
+        padding: 24px 32px;
+      }
+
+      .tab-panel.active {
+        display: block;
+      }
+
+      @keyframes fadeInPanel {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* ============================================
+   GLASS CARD
+   ============================================ */
+      .glass-card {
+        background: var(--bg-glass);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--border-glass);
+        border-radius: var(--radius-lg);
+        padding: 24px;
+        transition: all 0.3s ease;
+      }
+
+      .glass-card:hover {
+        border-color: var(--border-active);
+        box-shadow: var(--shadow-glow-green);
+      }
+
+      .card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+
+      .card-title {
+        font-family: var(--font-heading);
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .card-badge {
+        font-size: 10px;
+        padding: 3px 8px;
+        border-radius: 20px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .badge-green {
+        background: var(--accent-green-dim);
+        color: var(--accent-green);
+      }
+      .badge-blue {
+        background: var(--accent-blue-dim);
+        color: var(--accent-blue);
+      }
+      .badge-orange {
+        background: var(--accent-orange-dim);
+        color: var(--accent-orange);
+      }
+      .badge-red {
+        background: var(--accent-red-dim);
+        color: var(--accent-red);
+      }
+      .badge-purple {
+        background: var(--accent-purple-dim);
+        color: var(--accent-purple);
+      }
+
+      /* ============================================
+   TAB 1: PHYSICAL HARDWARE SIMULATOR
+   ============================================ */
+      .hardware-layout {
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr;
+        gap: 24px;
+        min-height: calc(100vh - 140px);
+      }
+
+      .hw-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      /* Product Image Card */
+      .product-image-card {
+        text-align: center;
+        padding: 20px;
+      }
+
+      .product-image-card img {
+        max-width: 100%;
+        max-height: 220px;
+        object-fit: contain;
+        filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.5));
+        transition: transform 0.3s ease;
+      }
+
+      .product-image-card img:hover {
+        transform: scale(1.05);
+      }
+
+      .product-label {
+        font-family: var(--font-heading);
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        margin-top: 12px;
+      }
+
+      /* Interactive Schematic */
+      .schematic-container {
+        position: relative;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-glass);
+        overflow: hidden;
+        min-height: 600px;
+      }
+
+      .schematic-svg {
+        width: 100%;
+        height: 100%;
+        min-height: 600px;
+      }
+
+      /* Valve Grid */
+      .valve-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+      }
+
+      .valve-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        padding: 10px 6px;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border-glass);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: var(--bg-glass);
+      }
+
+      .valve-item:hover {
+        border-color: var(--accent-blue);
+        background: var(--accent-blue-dim);
+      }
+
+      .valve-item.active {
+        border-color: var(--accent-green);
+        background: var(--accent-green-dim);
+        box-shadow: 0 0 12px rgba(52, 211, 153, 0.2);
+      }
+
+      .valve-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        transition: all 0.3s ease;
+      }
+
+      .valve-item .valve-icon {
+        background: rgba(96, 165, 250, 0.15);
+        border: 2px solid rgba(96, 165, 250, 0.3);
+      }
+
+      .valve-item.active .valve-icon {
+        background: rgba(52, 211, 153, 0.2);
+        border-color: var(--accent-green);
+        animation: valve-pulse 1.5s ease-in-out infinite;
+      }
+
+      @keyframes valve-pulse {
+        0%,
+        100% {
+          box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.3);
+        }
+        50% {
+          box-shadow: 0 0 0 6px rgba(52, 211, 153, 0);
+        }
+      }
+
+      .valve-label {
+        font-size: 10px;
+        font-weight: 600;
+        color: var(--text-secondary);
+      }
+
+      .valve-status {
+        font-size: 9px;
+        color: var(--text-muted);
+      }
+
+      .valve-item.active .valve-status {
+        color: var(--accent-green);
+      }
+
+      /* Sensor Items */
+      .sensor-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .sensor-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        border-radius: var(--radius-sm);
+        background: var(--bg-glass);
+        border: 1px solid var(--border-glass);
+        transition: all 0.3s ease;
+      }
+
+      .sensor-item:hover {
+        border-color: var(--accent-teal);
+      }
+
+      .sensor-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        flex-shrink: 0;
+      }
+
+      .sensor-info {
+        flex: 1;
+      }
+
+      .sensor-name {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--text-secondary);
+      }
+
+      .sensor-value {
+        font-family: var(--font-heading);
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+
+      .sensor-bar {
+        width: 100%;
+        height: 3px;
+        background: rgba(255, 255, 255, 0.06);
+        border-radius: 2px;
+        margin-top: 4px;
+        overflow: hidden;
+      }
+
+      .sensor-bar-fill {
+        height: 100%;
+        border-radius: 2px;
+        transition: width 1s ease;
+      }
+
+      /* Status Cards */
+      .status-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .status-item {
+        padding: 14px;
+        border-radius: var(--radius-sm);
+        background: var(--bg-glass);
+        border: 1px solid var(--border-glass);
+        text-align: center;
+      }
+
+      .status-icon {
+        font-size: 22px;
+        margin-bottom: 6px;
+      }
+
+      .status-label {
+        font-size: 10px;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 4px;
+      }
+
+      .status-value {
+        font-family: var(--font-heading);
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      /* Dosing channels */
+      .dosing-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .dosing-channel {
+        padding: 14px;
+        border-radius: var(--radius-sm);
+        background: var(--bg-glass);
+        border: 1px solid var(--border-glass);
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .dosing-channel:hover {
+        border-color: var(--accent-purple);
+      }
+
+      .dosing-channel.active {
+        border-color: var(--accent-purple);
+        background: var(--accent-purple-dim);
+      }
+
+      .dosing-icon {
+        font-size: 24px;
+        margin-bottom: 6px;
+      }
+
+      .dosing-label {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text-secondary);
+      }
+
+      .dosing-rate {
+        font-size: 10px;
+        color: var(--text-muted);
+        margin-top: 2px;
+      }
+
+      .dosing-bar {
+        width: 100%;
+        height: 3px;
+        background: rgba(255, 255, 255, 0.06);
+        border-radius: 2px;
+        margin-top: 6px;
+        overflow: hidden;
+      }
+
+      .dosing-bar-fill {
+        height: 100%;
+        border-radius: 2px;
+        background: var(--gradient-blue);
+        transition: width 1s ease;
+      }
+
+      /* ============================================
+   TAB 2: VIRTUAL CLOUD DASHBOARD
+   ============================================ */
+      .dashboard-layout {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        grid-auto-rows: auto;
+        gap: 20px;
+      }
+
+      .dash-col-4 {
+        grid-column: span 4;
+      }
+      .dash-col-6 {
+        grid-column: span 6;
+      }
+      .dash-col-8 {
+        grid-column: span 8;
+      }
+      .dash-col-12 {
+        grid-column: span 12;
+      }
+      .dash-col-3 {
+        grid-column: span 3;
+      }
+
+      /* Dashboard Top Bar */
+      .dash-topbar {
+        grid-column: span 12;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 24px;
+        background: var(--bg-glass);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--border-glass);
+        border-radius: var(--radius-lg);
+      }
+
+      .dash-farm-info {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .dash-farm-icon {
+        width: 44px;
+        height: 44px;
+        background: var(--gradient-green);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+      }
+
+      .dash-farm-name {
+        font-family: var(--font-heading);
+        font-size: 18px;
+        font-weight: 700;
+      }
+
+      .dash-farm-location {
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+
+      .dash-quick-stats {
+        display: flex;
+        gap: 24px;
+      }
+
+      .quick-stat {
+        text-align: center;
+      }
+
+      .quick-stat-value {
+        font-family: var(--font-heading);
+        font-size: 22px;
+        font-weight: 800;
+        color: var(--accent-green);
+      }
+
+      .quick-stat-label {
+        font-size: 10px;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      /* Irrigation Programs */
+      .program-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .program-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        border-radius: var(--radius-sm);
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid transparent;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .program-item:hover {
+        background: var(--bg-glass-hover);
+        border-color: var(--border-glass);
+      }
+
+      .program-item.running {
+        background: var(--accent-green-dim);
+        border-color: rgba(52, 211, 153, 0.2);
+      }
+
+      .program-num {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 700;
+        background: var(--bg-glass);
+        border: 1px solid var(--border-glass);
+      }
+
+      .program-item.running .program-num {
+        background: var(--accent-green-dim);
+        border-color: var(--accent-green);
+        color: var(--accent-green);
+      }
+
+      .program-info {
+        flex: 1;
+      }
+      .program-name {
+        font-size: 13px;
+        font-weight: 500;
+      }
+      .program-detail {
+        font-size: 11px;
+        color: var(--text-muted);
+      }
+
+      .program-status {
+        font-size: 10px;
+        padding: 3px 8px;
+        border-radius: 20px;
+        font-weight: 600;
+      }
+
+      /* Gauge */
+      .gauge-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+
+      .gauge-item {
+        text-align: center;
+        padding: 16px;
+        border-radius: var(--radius-md);
+        background: rgba(255, 255, 255, 0.02);
+      }
+
+      .gauge-circle {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        margin: 0 auto 10px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .gauge-circle svg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: rotate(-90deg);
+      }
+
+      .gauge-circle .gauge-val {
+        font-family: var(--font-heading);
+        font-size: 20px;
+        font-weight: 700;
+        z-index: 1;
+      }
+
+      .gauge-circle .gauge-unit {
+        font-size: 10px;
+        color: var(--text-muted);
+        z-index: 1;
+      }
+
+      .gauge-label {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--text-secondary);
+      }
+
+      /* Alerts Panel */
+      .alerts-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .alert-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 12px;
+        border-radius: var(--radius-sm);
+        background: rgba(255, 255, 255, 0.02);
+        border-left: 3px solid;
+        animation: slideInAlert 0.4s ease;
+      }
+
+      @keyframes slideInAlert {
+        from {
+          opacity: 0;
+          transform: translateX(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .alert-icon {
+        font-size: 16px;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      .alert-content {
+        flex: 1;
+      }
+      .alert-title {
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .alert-desc {
+        font-size: 11px;
+        color: var(--text-muted);
+        margin-top: 2px;
+      }
+      .alert-time {
+        font-size: 10px;
+        color: var(--text-muted);
+        white-space: nowrap;
+      }
+
+      /* Chart Container */
+      .chart-container {
+        width: 100%;
+        height: 200px;
+        position: relative;
+      }
+
+      .chart-container canvas {
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      /* Mini chart bar */
+      .mini-chart {
+        display: flex;
+        align-items: flex-end;
+        gap: 3px;
+        height: 80px;
+        padding-top: 10px;
+      }
+
+      .mini-bar {
+        flex: 1;
+        border-radius: 3px 3px 0 0;
+        transition: height 1s ease;
+        min-height: 4px;
+        position: relative;
+      }
+
+      .mini-bar:hover {
+        opacity: 0.8;
+      }
+
+      /* AI Advisor */
+      .advisor-card {
+        padding: 20px;
+        border-radius: var(--radius-md);
+        background: linear-gradient(
+          135deg,
+          rgba(167, 139, 250, 0.08),
+          rgba(96, 165, 250, 0.05)
+        );
+        border: 1px solid rgba(167, 139, 250, 0.15);
+      }
+
+      .advisor-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+
+      .advisor-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #a78bfa, #60a5fa);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+      }
+
+      .advisor-name {
+        font-family: var(--font-heading);
+        font-weight: 700;
+        font-size: 15px;
+      }
+
+      .advisor-sub {
+        font-size: 11px;
+        color: var(--accent-purple);
+      }
+
+      .advisor-recommendations {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .recommendation {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 12px;
+        border-radius: var(--radius-sm);
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--border-glass);
+      }
+
+      .rec-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        flex-shrink: 0;
+      }
+
+      .rec-text {
+        font-size: 12px;
+        color: var(--text-secondary);
+        line-height: 1.5;
+      }
+      .rec-text strong {
+        color: var(--text-primary);
+      }
+
+      /* Remote Control */
+      .remote-controls {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .remote-btn {
+        padding: 16px;
+        border-radius: var(--radius-md);
+        background: var(--bg-glass);
+        border: 1px solid var(--border-glass);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        color: var(--text-primary);
+        font-family: var(--font-body);
+      }
+
+      .remote-btn:hover {
+        border-color: var(--accent-green);
+        background: var(--accent-green-dim);
+        transform: translateY(-2px);
+      }
+
+      .remote-btn.active-ctrl {
+        border-color: var(--accent-green);
+        background: var(--accent-green-dim);
+      }
+
+      .remote-btn-icon {
+        font-size: 24px;
+        margin-bottom: 6px;
+      }
+      .remote-btn-label {
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .remote-btn-sub {
+        font-size: 10px;
+        color: var(--text-muted);
+        margin-top: 2px;
+      }
+
+      /* Dosing recipe visual */
+      .recipe-visual {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .recipe-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .recipe-color {
+        width: 12px;
+        height: 40px;
+        border-radius: 6px;
+        flex-shrink: 0;
+      }
+
+      .recipe-info {
+        flex: 1;
+      }
+      .recipe-name {
+        font-size: 12px;
+        font-weight: 500;
+      }
+      .recipe-amount {
+        font-size: 11px;
+        color: var(--text-muted);
+      }
+
+      .recipe-bar-container {
+        flex: 2;
+        height: 8px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .recipe-bar-fill {
+        height: 100%;
+        border-radius: 4px;
+        transition: width 1.5s ease;
+      }
+
+      /* ============================================
+   TAB 3: SYSTEM CONNECTION FLOW
+   ============================================ */
+      .flow-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px 0;
+      }
+
+      .flow-title {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .flow-title h2 {
+        font-family: var(--font-heading);
+        font-size: 32px;
+        font-weight: 800;
+        margin-bottom: 8px;
+        background: linear-gradient(
+          135deg,
+          var(--accent-green),
+          var(--accent-blue)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .flow-title p {
+        color: var(--text-secondary);
+        font-size: 15px;
+      }
+
+      /* Flow Diagram */
+      .flow-diagram {
+        position: relative;
+        width: 100%;
+        min-height: 500px;
+      }
+
+      .flow-nodes {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0;
+        position: relative;
+      }
+
+      .flow-row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        width: 100%;
+        margin-bottom: 32px;
+      }
+
+      .flow-node {
+        width: 180px;
+        padding: 24px 16px;
+        border-radius: var(--radius-lg);
+        background: var(--bg-glass);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--border-glass);
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.4s ease;
+        position: relative;
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      .flow-node.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .flow-node:hover {
+        border-color: var(--accent-green);
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: var(--shadow-glow-green);
+      }
+
+      .flow-node.active-node {
+        border-color: var(--accent-green);
+        box-shadow: var(--shadow-glow-green);
+      }
+
+      .flow-node.active-node::after {
+        content: "";
+        position: absolute;
+        inset: -3px;
+        border-radius: calc(var(--radius-lg) + 3px);
+        border: 2px solid var(--accent-green);
+        opacity: 0.3;
+        animation: node-ring 1.5s ease-in-out infinite;
+      }
+
+      @keyframes node-ring {
+        0%,
+        100% {
+          transform: scale(1);
+          opacity: 0.3;
+        }
+        50% {
+          transform: scale(1.03);
+          opacity: 0.1;
+        }
+      }
+
+      .flow-node-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
+        margin: 0 auto 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+      }
+
+      .flow-node-title {
+        font-family: var(--font-heading);
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+
+      .flow-node-desc {
+        font-size: 11px;
+        color: var(--text-muted);
+        line-height: 1.4;
+      }
+
+      /* Flow arrows */
+      .flow-arrow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 60px;
+        font-size: 24px;
+        color: var(--text-muted);
+        position: relative;
+      }
+
+      .flow-arrow.down {
+        width: 100%;
+        height: 40px;
+        font-size: 28px;
+      }
+
+      .flow-arrow .arrow-line {
+        width: 40px;
+        height: 2px;
+        background: linear-gradient(
+          90deg,
+          var(--accent-green),
+          var(--accent-blue)
+        );
+        position: relative;
+        opacity: 0.4;
+      }
+
+      .flow-arrow .arrow-line::after {
+        content: "▸";
+        position: absolute;
+        right: -10px;
+        top: -9px;
+        color: var(--accent-blue);
+        font-size: 16px;
+      }
+
+      .flow-arrow.down .arrow-line {
+        width: 2px;
+        height: 30px;
+        background: linear-gradient(
+          180deg,
+          var(--accent-green),
+          var(--accent-blue)
+        );
+      }
+
+      .flow-arrow.down .arrow-line::after {
+        content: "▾";
+        right: -6px;
+        top: auto;
+        bottom: -12px;
+      }
+
+      /* Data packet animation */
+      .data-packet {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--accent-green);
+        position: absolute;
+        box-shadow: 0 0 8px var(--accent-green);
+        animation: packet-move 2s linear infinite;
+      }
+
+      @keyframes packet-move {
+        0% {
+          left: 0;
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        90% {
+          opacity: 1;
+        }
+        100% {
+          left: calc(100% - 8px);
+          opacity: 0;
+        }
+      }
+
+      /* Flow detail panel */
+      .flow-detail {
+        margin-top: 20px;
+        padding: 24px;
+        border-radius: var(--radius-lg);
+        background: var(--bg-glass);
+        border: 1px solid var(--border-glass);
+        backdrop-filter: blur(12px);
+        min-height: 120px;
+        transition: all 0.3s ease;
+      }
+
+      .flow-detail-title {
+        font-family: var(--font-heading);
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .flow-detail-text {
+        font-size: 13px;
+        color: var(--text-secondary);
+        line-height: 1.7;
+      }
+
+      .flow-detail-specs {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      .flow-spec {
+        padding: 12px;
+        border-radius: var(--radius-sm);
+        background: rgba(255, 255, 255, 0.03);
+        text-align: center;
+      }
+
+      .flow-spec-val {
+        font-family: var(--font-heading);
+        font-size: 20px;
+        font-weight: 800;
+        color: var(--accent-green);
+      }
+
+      .flow-spec-label {
+        font-size: 10px;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-top: 2px;
+      }
+
+      /* Loop animation */
+      .flow-loop-banner {
+        text-align: center;
+        padding: 20px;
+        margin-top: 24px;
+        border-radius: var(--radius-lg);
+        background: linear-gradient(
+          135deg,
+          rgba(52, 211, 153, 0.08),
+          rgba(96, 165, 250, 0.06)
+        );
+        border: 1px solid rgba(52, 211, 153, 0.15);
+      }
+
+      .flow-loop-banner h3 {
+        font-family: var(--font-heading);
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--accent-green);
+        margin-bottom: 6px;
+      }
+
+      .flow-loop-banner p {
+        font-size: 13px;
+        color: var(--text-secondary);
+      }
+
+      /* ============================================
+   WATER FLOW ANIMATION
+   ============================================ */
+      @keyframes water-flow {
+        0% {
+          stroke-dashoffset: 20;
+        }
+        100% {
+          stroke-dashoffset: 0;
+        }
+      }
+
+      .water-line {
+        stroke-dasharray: 8 4;
+        animation: water-flow 0.8s linear infinite;
+      }
+
+      /* SVG Schematic Styles */
+      .schematic-bg {
+        fill: none;
+      }
+
+      .pipe {
+        stroke: rgba(96, 165, 250, 0.2);
+        stroke-width: 3;
+        fill: none;
+        stroke-linecap: round;
+      }
+
+      .pipe.active {
+        stroke: rgba(96, 165, 250, 0.5);
+        stroke-dasharray: 8 4;
+        animation: water-flow 0.8s linear infinite;
+      }
+
+      .pipe.active-green {
+        stroke: rgba(52, 211, 153, 0.5);
+        stroke-dasharray: 8 4;
+        animation: water-flow 0.8s linear infinite;
+      }
+
+      .component-box {
+        fill: rgba(255, 255, 255, 0.03);
+        stroke: var(--border-glass);
+        stroke-width: 1;
+        rx: 8;
+      }
+
+      .component-label {
+        fill: var(--text-secondary);
+        font-family: var(--font-body);
+        font-size: 10px;
+        font-weight: 500;
+        text-anchor: middle;
+      }
+
+      .component-value {
+        fill: var(--text-primary);
+        font-family: var(--font-heading);
+        font-size: 13px;
+        font-weight: 700;
+        text-anchor: middle;
+      }
+
+      .component-icon-text {
+        fill: var(--text-primary);
+        font-size: 20px;
+        text-anchor: middle;
+        dominant-baseline: central;
+      }
+
+      /* ============================================
+   RESPONSIVE
+   ============================================ */
+      @media (max-width: 1200px) {
+        .hardware-layout {
+          grid-template-columns: 1fr 1fr;
+        }
+        .hw-sidebar:last-child {
+          grid-column: span 2;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 16px;
+        }
+        .dashboard-layout {
+          grid-template-columns: repeat(6, 1fr);
+        }
+        .dash-col-4 {
+          grid-column: span 3;
+        }
+        .dash-col-6 {
+          grid-column: span 6;
+        }
+        .dash-col-8 {
+          grid-column: span 6;
+        }
+        .dash-col-3 {
+          grid-column: span 3;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .navbar {
+          padding: 0 16px;
+        }
+        .tab-nav {
+          display: none;
+        }
+        .tab-panel {
+          padding: 16px;
+        }
+        .hardware-layout {
+          grid-template-columns: 1fr;
+        }
+        .hw-sidebar:last-child {
+          grid-column: span 1;
+          grid-template-columns: 1fr;
+        }
+        .dashboard-layout {
+          grid-template-columns: 1fr;
+        }
+        .dash-col-4,
+        .dash-col-6,
+        .dash-col-8,
+        .dash-col-3,
+        .dash-col-12 {
+          grid-column: span 1;
+        }
+        .flow-row {
+          flex-direction: column;
+        }
+        .flow-arrow {
+          transform: rotate(90deg);
+        }
+      }
+
+      /* ============================================
+   SCROLLBAR
+   ============================================ */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      /* ============================================
+   WATER DROP PARTICLES
+   ============================================ */
+      .particle-container {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+      }
+
+      .water-particle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: var(--accent-teal);
+        border-radius: 50%;
+        opacity: 0;
+        animation: float-particle linear infinite;
+      }
+
+      @keyframes float-particle {
+        0% {
+          opacity: 0;
+          transform: translateY(100vh) scale(0);
+        }
+        10% {
+          opacity: 0.3;
+        }
+        90% {
+          opacity: 0.1;
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(-20px) scale(1);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Water Particles Background -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+      <a href="#" class="navbar-brand">
+        <div class="navbar-logo">💧</div>
+        <div>
+          <div class="navbar-title">GrowSphere™ <span>FLEX</span></div>
+          <div class="navbar-subtitle">Interactive Simulator</div>
+        </div>
+      </a>
+
+      <div class="tab-nav" id="tabNav">
+        <button
+          class="tab-btn active"
+          data-tab="hardware"
+          id="tab-hardware-btn"
+        >
+          <span class="tab-icon">🔧</span> Physical Hardware
+        </button>
+        <button class="tab-btn" data-tab="dashboard" id="tab-dashboard-btn">
+          <span class="tab-icon">📊</span> Cloud Dashboard
+        </button>
+        <button class="tab-btn" data-tab="flow" id="tab-flow-btn">
+          <span class="tab-icon">🔄</span> System Flow
+        </button>
+      </div>
+
+      <div class="live-badge">
+        <div class="live-dot"></div>
+        SIMULATION LIVE
+      </div>
+    </nav>
+
+    <!-- ==========================================
+     TAB 1: PHYSICAL HARDWARE SIMULATOR
+     ========================================== -->
+    <main class="main-content">
+      <section class="tab-panel active" id="panel-hardware">
+        <div class="hardware-layout">
+          <!-- Left Sidebar: Product Images & Status -->
+          <div class="hw-sidebar">
+            <!-- Product Image -->
+            <div class="glass-card product-image-card">
+              <img
+                src="../Prodcut.png"
+                alt="GrowSphere FLEX with valve rail"
+                id="product-img-full"
+              />
+              <div class="product-label">GrowSphere™ FLEX System</div>
+            </div>
+
+            <!-- Close-up -->
+            <div class="glass-card product-image-card">
+              <img
+                src="../flex.png"
+                alt="GrowSphere FLEX Controller"
+                id="product-img-closeup"
+              />
+              <div class="product-label">Controller Unit</div>
+            </div>
+
+            <!-- System Status -->
+            <div class="glass-card">
+              <div class="card-header">
+                <div class="card-title">⚡ System Status</div>
+                <span class="card-badge badge-green">Online</span>
+              </div>
+              <div class="status-grid">
+                <div class="status-item">
+                  <div class="status-icon">☀️</div>
+                  <div class="status-label">Power</div>
+                  <div class="status-value" style="color: var(--accent-green)">
+                    Solar
+                  </div>
+                </div>
+                <div class="status-item">
+                  <div class="status-icon">📶</div>
+                  <div class="status-label">Cellular</div>
+                  <div class="status-value" style="color: var(--accent-green)">
+                    4G LTE
+                  </div>
+                </div>
+                <div class="status-item">
+                  <div class="status-icon">🌡️</div>
+                  <div class="status-label">Device Temp</div>
+                  <div class="status-value" id="device-temp">38°C</div>
+                </div>
+                <div class="status-item">
+                  <div class="status-icon">⏱️</div>
+                  <div class="status-label">Uptime</div>
+                  <div class="status-value" id="uptime-val">47d 12h</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Center: Interactive Schematic -->
+          <div>
+            <!-- Valve Control Panel -->
+            <div class="glass-card" style="margin-bottom: 20px">
+              <div class="card-header">
+                <div class="card-title">🔵 Valve Outputs — 16 DC Channels</div>
+                <span class="card-badge badge-blue">Click to Toggle</span>
+              </div>
+              <div class="valve-grid" id="valve-grid">
+                <!-- Valves generated by JS -->
+              </div>
+            </div>
+
+            <!-- Dosing Channels -->
+            <div class="glass-card" style="margin-bottom: 20px">
+              <div class="card-header">
+                <div class="card-title">🧪 Fertigation — 4 Dosing Channels</div>
+                <span class="card-badge badge-purple">Active</span>
+              </div>
+              <div class="dosing-grid" id="dosing-grid">
+                <!-- Generated by JS -->
+              </div>
+            </div>
+
+            <!-- Main Infrastructure -->
+            <div class="glass-card">
+              <div class="card-header">
+                <div class="card-title">🏗️ Main Infrastructure</div>
+              </div>
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: repeat(3, 1fr);
+                  gap: 12px;
+                "
+              >
+                <div class="status-item" id="main-valve-status">
+                  <div class="status-icon">🔴</div>
+                  <div class="status-label">Main Valve</div>
+                  <div class="status-value" style="color: var(--accent-green)">
+                    Open
+                  </div>
+                </div>
+                <div class="status-item">
+                  <div class="status-icon">💧</div>
+                  <div class="status-label">Water Meter</div>
+                  <div
+                    class="status-value"
+                    id="water-meter-val"
+                    style="color: var(--accent-blue)"
+                  >
+                    1,247 m³
+                  </div>
+                </div>
+                <div class="status-item" id="pump-status">
+                  <div class="status-icon">⚙️</div>
+                  <div class="status-label">Pump</div>
+                  <div class="status-value" style="color: var(--accent-green)">
+                    Running
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Sidebar: Sensors -->
+          <div class="hw-sidebar">
+            <!-- Digital Inputs -->
+            <div class="glass-card">
+              <div class="card-header">
+                <div class="card-title">📥 Digital Inputs (8)</div>
+                <span class="card-badge badge-green">Live</span>
+              </div>
+              <div class="sensor-list" id="digital-sensors">
+                <!-- Generated by JS -->
+              </div>
+            </div>
+
+            <!-- Analog Inputs -->
+            <div class="glass-card">
+              <div class="card-header">
+                <div class="card-title">📈 Analog Inputs (4)</div>
+                <span class="card-badge badge-blue">Live</span>
+              </div>
+              <div class="sensor-list" id="analog-sensors">
+                <!-- Generated by JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+     TAB 2: VIRTUAL CLOUD DASHBOARD
+     ========================================== -->
+      <section class="tab-panel" id="panel-dashboard">
+        <div class="dashboard-layout">
+          <!-- Top Bar -->
+          <div class="dash-topbar">
+            <div class="dash-farm-info">
+              <div class="dash-farm-icon">🌾</div>
+              <div>
+                <div class="dash-farm-name">Green Valley Farm</div>
+                <div class="dash-farm-location">
+                  📍 Maharashtra, India · 12.5 Hectares
+                </div>
+              </div>
+            </div>
+            <div class="dash-quick-stats">
+              <div class="quick-stat">
+                <div class="quick-stat-value" id="qs-water">2,847</div>
+                <div class="quick-stat-label">Liters Today</div>
+              </div>
+              <div class="quick-stat">
+                <div
+                  class="quick-stat-value"
+                  style="color: var(--accent-blue)"
+                  id="qs-savings"
+                >
+                  32%
+                </div>
+                <div class="quick-stat-label">Water Saved</div>
+              </div>
+              <div class="quick-stat">
+                <div
+                  class="quick-stat-value"
+                  style="color: var(--accent-teal)"
+                  id="qs-zones"
+                >
+                  6/8
+                </div>
+                <div class="quick-stat-label">Zones Active</div>
+              </div>
+              <div class="quick-stat">
+                <div
+                  class="quick-stat-value"
+                  style="color: var(--accent-purple)"
+                >
+                  AI
+                </div>
+                <div class="quick-stat-label">Advisor Ready</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Irrigation Programs -->
+          <div class="glass-card dash-col-4">
+            <div class="card-header">
+              <div class="card-title">🌱 Irrigation Programs</div>
+              <span class="card-badge badge-green">8 Configured</span>
+            </div>
+            <div class="program-list" id="program-list">
+              <!-- Generated by JS -->
+            </div>
+          </div>
+
+          <!-- Sensor Gauges -->
+          <div class="glass-card dash-col-4">
+            <div class="card-header">
+              <div class="card-title">📊 Real-Time Sensors</div>
+              <span class="card-badge badge-blue">Live Data</span>
+            </div>
+            <div class="gauge-grid" id="gauge-grid">
+              <!-- Generated by JS -->
+            </div>
+          </div>
+
+          <!-- Smart Alerts -->
+          <div class="glass-card dash-col-4">
+            <div class="card-header">
+              <div class="card-title">🔔 Smart Alerts</div>
+              <span class="card-badge badge-orange">3 New</span>
+            </div>
+            <div class="alerts-list" id="alerts-list">
+              <!-- Generated by JS -->
+            </div>
+          </div>
+
+          <!-- Water Usage Chart -->
+          <div class="glass-card dash-col-8">
+            <div class="card-header">
+              <div class="card-title">📈 Water Usage — Last 7 Days</div>
+              <span class="card-badge badge-blue">Report</span>
+            </div>
+            <div class="mini-chart" id="water-chart">
+              <!-- Generated by JS -->
+            </div>
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                margin-top: 8px;
+              "
+            >
+              <span style="font-size: 10px; color: var(--text-muted)">Mon</span>
+              <span style="font-size: 10px; color: var(--text-muted)">Tue</span>
+              <span style="font-size: 10px; color: var(--text-muted)">Wed</span>
+              <span style="font-size: 10px; color: var(--text-muted)">Thu</span>
+              <span style="font-size: 10px; color: var(--text-muted)">Fri</span>
+              <span style="font-size: 10px; color: var(--text-muted)">Sat</span>
+              <span style="font-size: 10px; color: var(--text-muted)">Sun</span>
+            </div>
+          </div>
+
+          <!-- AI Crop Advisor -->
+          <div class="dash-col-4">
+            <div class="advisor-card">
+              <div class="advisor-header">
+                <div class="advisor-avatar">🤖</div>
+                <div>
+                  <div class="advisor-name">AI Crop Advisor</div>
+                  <div class="advisor-sub">
+                    Powered by GrowSphere Intelligence
+                  </div>
+                </div>
+              </div>
+              <div class="advisor-recommendations">
+                <div class="recommendation">
+                  <div
+                    class="rec-icon"
+                    style="background: var(--accent-green-dim)"
+                  >
+                    💧
+                  </div>
+                  <div class="rec-text">
+                    <strong>Reduce irrigation by 15%</strong> — Soil moisture
+                    levels are above optimal range. Forecast shows rain in 2
+                    days.
+                  </div>
+                </div>
+                <div class="recommendation">
+                  <div
+                    class="rec-icon"
+                    style="background: var(--accent-orange-dim)"
+                  >
+                    🧪
+                  </div>
+                  <div class="rec-text">
+                    <strong>Increase Potassium dose</strong> — EC readings
+                    suggest K+ deficiency in Zone 3. Adjust dosing recipe #4.
+                  </div>
+                </div>
+                <div class="recommendation">
+                  <div
+                    class="rec-icon"
+                    style="background: var(--accent-blue-dim)"
+                  >
+                    📅
+                  </div>
+                  <div class="rec-text">
+                    <strong>Shift irrigation to 5:00 AM</strong> —
+                    Evapotranspiration analysis shows 23% less water loss in
+                    early morning.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dosing Recipes -->
+          <div class="glass-card dash-col-4">
+            <div class="card-header">
+              <div class="card-title">🧬 Dosing Recipes</div>
+              <span class="card-badge badge-purple">8 Recipes</span>
+            </div>
+            <div class="recipe-visual" id="recipe-visual">
+              <!-- Generated by JS -->
+            </div>
+          </div>
+
+          <!-- Remote Control -->
+          <div class="glass-card dash-col-4">
+            <div class="card-header">
+              <div class="card-title">🎮 Remote Control</div>
+              <span class="card-badge badge-green">Connected</span>
+            </div>
+            <div class="remote-controls" id="remote-controls">
+              <button
+                class="remote-btn active-ctrl"
+                id="btn-start-irrig"
+                onclick="toggleRemote(this)"
+              >
+                <div class="remote-btn-icon">▶️</div>
+                <div class="remote-btn-label">Start Irrigation</div>
+                <div class="remote-btn-sub">Program 1</div>
+              </button>
+              <button
+                class="remote-btn"
+                id="btn-stop-irrig"
+                onclick="toggleRemote(this)"
+              >
+                <div class="remote-btn-icon">⏹️</div>
+                <div class="remote-btn-label">Stop All</div>
+                <div class="remote-btn-sub">Emergency stop</div>
+              </button>
+              <button
+                class="remote-btn"
+                id="btn-dose"
+                onclick="toggleRemote(this)"
+              >
+                <div class="remote-btn-icon">🧪</div>
+                <div class="remote-btn-label">Manual Dose</div>
+                <div class="remote-btn-sub">Channel 1</div>
+              </button>
+              <button
+                class="remote-btn"
+                id="btn-schedule"
+                onclick="toggleRemote(this)"
+              >
+                <div class="remote-btn-icon">📅</div>
+                <div class="remote-btn-label">Edit Schedule</div>
+                <div class="remote-btn-sub">8 programs</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Performance Report -->
+          <div class="glass-card dash-col-4">
+            <div class="card-header">
+              <div class="card-title">🏆 Performance</div>
+              <span class="card-badge badge-green">This Month</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 16px">
+              <div>
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 6px;
+                  "
+                >
+                  <span style="font-size: 12px; color: var(--text-secondary)"
+                    >Water Efficiency</span
+                  >
+                  <span
+                    style="
+                      font-size: 12px;
+                      font-weight: 700;
+                      color: var(--accent-green);
+                    "
+                    >92%</span
+                  >
+                </div>
+                <div class="sensor-bar">
+                  <div
+                    class="sensor-bar-fill"
+                    style="width: 92%; background: var(--gradient-green)"
+                  ></div>
+                </div>
+              </div>
+              <div>
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 6px;
+                  "
+                >
+                  <span style="font-size: 12px; color: var(--text-secondary)"
+                    >Fertilizer Accuracy</span
+                  >
+                  <span
+                    style="
+                      font-size: 12px;
+                      font-weight: 700;
+                      color: var(--accent-blue);
+                    "
+                    >88%</span
+                  >
+                </div>
+                <div class="sensor-bar">
+                  <div
+                    class="sensor-bar-fill"
+                    style="width: 88%; background: var(--gradient-blue)"
+                  ></div>
+                </div>
+              </div>
+              <div>
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 6px;
+                  "
+                >
+                  <span style="font-size: 12px; color: var(--text-secondary)"
+                    >Yield Improvement</span
+                  >
+                  <span
+                    style="
+                      font-size: 12px;
+                      font-weight: 700;
+                      color: var(--accent-teal);
+                    "
+                    >+24%</span
+                  >
+                </div>
+                <div class="sensor-bar">
+                  <div
+                    class="sensor-bar-fill"
+                    style="width: 74%; background: var(--gradient-teal)"
+                  ></div>
+                </div>
+              </div>
+              <div>
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 6px;
+                  "
+                >
+                  <span style="font-size: 12px; color: var(--text-secondary)"
+                    >Cost Savings</span
+                  >
+                  <span
+                    style="
+                      font-size: 12px;
+                      font-weight: 700;
+                      color: var(--accent-orange);
+                    "
+                    >₹1.2L/yr</span
+                  >
+                </div>
+                <div class="sensor-bar">
+                  <div
+                    class="sensor-bar-fill"
+                    style="
+                      width: 80%;
+                      background: linear-gradient(90deg, #fb923c, #f97316);
+                    "
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+     TAB 3: SYSTEM CONNECTION FLOW
+     ========================================== -->
+      <section class="tab-panel" id="panel-flow">
+        <div class="flow-container">
+          <div class="flow-title">
+            <h2>Seamless Synergy — How It All Connects</h2>
+            <p>
+              The perfect blend of hardware and software, closing the loop for
+              maximum efficiency
+            </p>
+          </div>
+
+          <div class="flow-diagram">
+            <!-- Row 1: Field to Controller -->
+            <div class="flow-row">
+              <div
+                class="flow-node"
+                data-flow="field"
+                onclick="showFlowDetail('field')"
+              >
+                <div
+                  class="flow-node-icon"
+                  style="background: var(--accent-green-dim)"
+                >
+                  🌾
+                </div>
+                <div class="flow-node-title">Farm Field</div>
+                <div class="flow-node-desc">
+                  Sensors collect soil moisture, temperature & weather data
+                </div>
+              </div>
+              <div class="flow-arrow">
+                <div class="arrow-line"><div class="data-packet"></div></div>
+              </div>
+              <div
+                class="flow-node"
+                data-flow="sensors"
+                onclick="showFlowDetail('sensors')"
+              >
+                <div
+                  class="flow-node-icon"
+                  style="background: var(--accent-teal-dim)"
+                >
+                  📡
+                </div>
+                <div class="flow-node-title">Sensors</div>
+                <div class="flow-node-desc">
+                  8 digital + 4 analog inputs capture real-time data
+                </div>
+              </div>
+              <div class="flow-arrow">
+                <div class="arrow-line">
+                  <div class="data-packet" style="animation-delay: 0.3s"></div>
+                </div>
+              </div>
+              <div
+                class="flow-node"
+                data-flow="controller"
+                onclick="showFlowDetail('controller')"
+              >
+                <div
+                  class="flow-node-icon"
+                  style="background: var(--accent-blue-dim)"
+                >
+                  🎛️
+                </div>
+                <div class="flow-node-title">FLEX Controller</div>
+                <div class="flow-node-desc">
+                  Processes data, manages 16 valves & 4 dosing channels
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 2: Controller to Cloud -->
+            <div class="flow-row">
+              <div
+                class="flow-node"
+                data-flow="cellular"
+                onclick="showFlowDetail('cellular')"
+              >
+                <div
+                  class="flow-node-icon"
+                  style="background: var(--accent-orange-dim)"
+                >
+                  📶
+                </div>
+                <div class="flow-node-title">Cellular Network</div>
+                <div class="flow-node-desc">
+                  4G LTE connectivity uploads data to the cloud
+                </div>
+              </div>
+              <div class="flow-arrow">
+                <div class="arrow-line">
+                  <div class="data-packet" style="animation-delay: 0.6s"></div>
+                </div>
+              </div>
+              <div
+                class="flow-node"
+                data-flow="cloud"
+                onclick="showFlowDetail('cloud')"
+              >
+                <div
+                  class="flow-node-icon"
+                  style="background: var(--accent-purple-dim)"
+                >
+                  ☁️
+                </div>
+                <div class="flow-node-title">GrowSphere Cloud</div>
+                <div class="flow-node-desc">
+                  AI analysis, reports, and irrigation optimization
+                </div>
+              </div>
+              <div class="flow-arrow">
+                <div class="arrow-line">
+                  <div class="data-packet" style="animation-delay: 0.9s"></div>
+                </div>
+              </div>
+              <div
+                class="flow-node"
+                data-flow="farmer"
+                onclick="showFlowDetail('farmer')"
+              >
+                <div
+                  class="flow-node-icon"
+                  style="background: var(--accent-green-dim)"
+                >
+                  📱
+                </div>
+                <div class="flow-node-title">Farmer's Device</div>
+                <div class="flow-node-desc">
+                  Monitor & control from anywhere via app or browser
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 3: Back to Field -->
+            <div class="flow-row">
+              <div
+                class="flow-node"
+                data-flow="commands"
+                onclick="showFlowDetail('commands')"
+              >
+                <div
+                  class="flow-node-icon"
+                  style="background: var(--accent-blue-dim)"
+                >
+                  🎯
+                </div>
+                <div class="flow-node-title">Remote Commands</div>
+                <div class="flow-node-desc">
+                  Start/stop irrigation, adjust dosing, change schedules
+                </div>
+              </div>
+              <div class="flow-arrow">
+                <div class="arrow-line">
+                  <div
+                    class="data-packet"
+                    style="
+                      animation-delay: 1.2s;
+                      background: var(--accent-blue);
+                      box-shadow: 0 0 8px var(--accent-blue);
+                    "
+                  ></div>
+                </div>
+              </div>
+              <div
+                class="flow-node"
+                data-flow="execution"
+                onclick="showFlowDetail('execution')"
+              >
+                <div
+                  class="flow-node-icon"
+                  style="background: var(--accent-teal-dim)"
+                >
+                  💧
+                </div>
+                <div class="flow-node-title">Irrigation Execution</div>
+                <div class="flow-node-desc">
+                  Valves open, pumps run, fertigation doses applied
+                </div>
+              </div>
+              <div class="flow-arrow">
+                <div class="arrow-line">
+                  <div
+                    class="data-packet"
+                    style="
+                      animation-delay: 1.5s;
+                      background: var(--accent-teal);
+                      box-shadow: 0 0 8px var(--accent-teal);
+                    "
+                  ></div>
+                </div>
+              </div>
+              <div
+                class="flow-node"
+                data-flow="results"
+                onclick="showFlowDetail('results')"
+              >
+                <div
+                  class="flow-node-icon"
+                  style="background: var(--accent-green-dim)"
+                >
+                  🌿
+                </div>
+                <div class="flow-node-title">Optimized Growth</div>
+                <div class="flow-node-desc">
+                  Better yields, less waste, full traceability
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Detail Panel -->
+          <div class="flow-detail" id="flow-detail">
+            <div class="flow-detail-title" id="flow-detail-title">
+              👆 Click any node above to see details
+            </div>
+            <div class="flow-detail-text" id="flow-detail-text">
+              Explore the complete data flow from field sensors to cloud
+              intelligence and back. Each component works seamlessly to optimize
+              your irrigation and fertigation operations.
+            </div>
+            <div class="flow-detail-specs" id="flow-detail-specs"></div>
+          </div>
+
+          <div class="flow-loop-banner">
+            <h3>🔄 Continuous Optimization Loop</h3>
+            <p>
+              Data flows continuously — sensors feed the AI, the AI refines
+              irrigation plans, and the controller executes with precision.
+              Every cycle makes your farm smarter.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ==========================================
+     JAVASCRIPT — All Simulator Logic
+     ========================================== -->
+    <script>
+      // ============================================
+      // TAB NAVIGATION
+      // ============================================
+      const tabBtns = document.querySelectorAll(".tab-btn");
+      const tabPanels = document.querySelectorAll(".tab-panel");
+
+      tabBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const tab = btn.dataset.tab;
+
+          tabBtns.forEach((b) => b.classList.remove("active"));
+          tabPanels.forEach((p) => p.classList.remove("active"));
+
+          btn.classList.add("active");
+          document.getElementById(`panel-${tab}`).classList.add("active");
+
+          if (tab === "flow") animateFlowNodes();
+          if (tab === "dashboard") animateDashboard();
+        });
+      });
+
+      // ============================================
+      // WATER PARTICLES
+      // ============================================
+      function createParticles() {
+        const container = document.getElementById("particles");
+        for (let i = 0; i < 20; i++) {
+          const p = document.createElement("div");
+          p.className = "water-particle";
+          p.style.left = Math.random() * 100 + "%";
+          p.style.animationDuration = 8 + Math.random() * 12 + "s";
+          p.style.animationDelay = Math.random() * 10 + "s";
+          p.style.width = 2 + Math.random() * 4 + "px";
+          p.style.height = p.style.width;
+          container.appendChild(p);
+        }
+      }
+      createParticles();
+
+      // ============================================
+      // TAB 1: HARDWARE — Generate Valves
+      // ============================================
+      const valveGrid = document.getElementById("valve-grid");
+      const valveStates = new Array(16).fill(false);
+      // Start with some valves active
+      [0, 2, 5, 7, 11].forEach((i) => (valveStates[i] = true));
+
+      function renderValves() {
+        valveGrid.innerHTML = "";
+        for (let i = 0; i < 16; i++) {
+          const active = valveStates[i];
+          const div = document.createElement("div");
+          div.className = `valve-item ${active ? "active" : ""}`;
+          div.onclick = () => {
+            valveStates[i] = !valveStates[i];
+            renderValves();
+            updateActiveCount();
+          };
+          div.innerHTML = `
+      <div class="valve-icon">${active ? "🔵" : "⚫"}</div>
+      <div class="valve-label">V${i + 1}</div>
+      <div class="valve-status">${active ? "OPEN" : "CLOSED"}</div>
+    `;
+          valveGrid.appendChild(div);
+        }
+      }
+      renderValves();
+
+      function updateActiveCount() {
+        const count = valveStates.filter((v) => v).length;
+        const qsZones = document.getElementById("qs-zones");
+        if (qsZones) qsZones.textContent = `${count}/16`;
+      }
+
+      // ============================================
+      // TAB 1: HARDWARE — Dosing Channels
+      // ============================================
+      const dosingGrid = document.getElementById("dosing-grid");
+      const dosingData = [
+        {
+          name: "Channel A",
+          icon: "🟢",
+          color: "#34d399",
+          rate: "2.4 L/h",
+          level: 78,
+          active: true,
+        },
+        {
+          name: "Channel B",
+          icon: "🔵",
+          color: "#60a5fa",
+          rate: "1.8 L/h",
+          level: 62,
+          active: true,
+        },
+        {
+          name: "Channel C",
+          icon: "🟡",
+          color: "#fbbf24",
+          rate: "0.9 L/h",
+          level: 45,
+          active: false,
+        },
+        {
+          name: "Channel D",
+          icon: "🟣",
+          color: "#a78bfa",
+          rate: "3.1 L/h",
+          level: 85,
+          active: true,
+        },
+      ];
+
+      function renderDosing() {
+        dosingGrid.innerHTML = "";
+        dosingData.forEach((d, i) => {
+          const div = document.createElement("div");
+          div.className = `dosing-channel ${d.active ? "active" : ""}`;
+          div.onclick = () => {
+            dosingData[i].active = !dosingData[i].active;
+            renderDosing();
+          };
+          div.innerHTML = `
+      <div class="dosing-icon">${d.icon}</div>
+      <div class="dosing-label">${d.name}</div>
+      <div class="dosing-rate">${d.active ? d.rate : "Stopped"}</div>
+      <div class="dosing-bar"><div class="dosing-bar-fill" style="width: ${d.active ? d.level : 0}%; background: ${d.color};"></div></div>
+    `;
+          dosingGrid.appendChild(div);
+        });
+      }
+      renderDosing();
+
+      // ============================================
+      // TAB 1: HARDWARE — Digital Sensors
+      // ============================================
+      const digitalSensors = document.getElementById("digital-sensors");
+      const digitalData = [
+        {
+          name: "Soil Moisture 1",
+          icon: "💧",
+          value: "64%",
+          bar: 64,
+          color: "#34d399",
+          bg: "var(--accent-green-dim)",
+        },
+        {
+          name: "Soil Moisture 2",
+          icon: "💧",
+          value: "58%",
+          bar: 58,
+          color: "#34d399",
+          bg: "var(--accent-green-dim)",
+        },
+        {
+          name: "Rain Sensor",
+          icon: "🌧️",
+          value: "Dry",
+          bar: 0,
+          color: "#60a5fa",
+          bg: "var(--accent-blue-dim)",
+        },
+        {
+          name: "Pressure Switch",
+          icon: "🔘",
+          value: "2.4 bar",
+          bar: 60,
+          color: "#f59e0b",
+          bg: "var(--accent-orange-dim)",
+        },
+        {
+          name: "Flow Switch 1",
+          icon: "🔄",
+          value: "Active",
+          bar: 80,
+          color: "#2dd4bf",
+          bg: "var(--accent-teal-dim)",
+        },
+        {
+          name: "Flow Switch 2",
+          icon: "🔄",
+          value: "Active",
+          bar: 75,
+          color: "#2dd4bf",
+          bg: "var(--accent-teal-dim)",
+        },
+        {
+          name: "Level Sensor A",
+          icon: "📏",
+          value: "72%",
+          bar: 72,
+          color: "#a78bfa",
+          bg: "var(--accent-purple-dim)",
+        },
+        {
+          name: "Level Sensor B",
+          icon: "📏",
+          value: "85%",
+          bar: 85,
+          color: "#a78bfa",
+          bg: "var(--accent-purple-dim)",
+        },
+      ];
+
+      function renderDigitalSensors() {
+        digitalSensors.innerHTML = "";
+        digitalData.forEach((s) => {
+          const div = document.createElement("div");
+          div.className = "sensor-item";
+          div.innerHTML = `
+      <div class="sensor-icon" style="background: ${s.bg}">${s.icon}</div>
+      <div class="sensor-info">
+        <div class="sensor-name">${s.name}</div>
+        <div class="sensor-value">${s.value}</div>
+        <div class="sensor-bar"><div class="sensor-bar-fill" style="width: ${s.bar}%; background: ${s.color};"></div></div>
+      </div>
+    `;
+          digitalSensors.appendChild(div);
+        });
+      }
+      renderDigitalSensors();
+
+      // ============================================
+      // TAB 1: HARDWARE — Analog Sensors
+      // ============================================
+      const analogSensors = document.getElementById("analog-sensors");
+      const analogData = [
+        {
+          name: "EC (Conductivity)",
+          icon: "⚡",
+          value: "1.8 dS/m",
+          bar: 60,
+          color: "#f59e0b",
+          bg: "var(--accent-orange-dim)",
+        },
+        {
+          name: "pH Level",
+          icon: "🧪",
+          value: "6.5",
+          bar: 65,
+          color: "#34d399",
+          bg: "var(--accent-green-dim)",
+        },
+        {
+          name: "Temperature",
+          icon: "🌡️",
+          value: "28.3°C",
+          bar: 56,
+          color: "#f87171",
+          bg: "var(--accent-red-dim)",
+        },
+        {
+          name: "Flow Rate",
+          icon: "🌊",
+          value: "4.2 m³/h",
+          bar: 70,
+          color: "#60a5fa",
+          bg: "var(--accent-blue-dim)",
+        },
+      ];
+
+      function renderAnalogSensors() {
+        analogSensors.innerHTML = "";
+        analogData.forEach((s) => {
+          const div = document.createElement("div");
+          div.className = "sensor-item";
+          div.innerHTML = `
+      <div class="sensor-icon" style="background: ${s.bg}">${s.icon}</div>
+      <div class="sensor-info">
+        <div class="sensor-name">${s.name}</div>
+        <div class="sensor-value">${s.value}</div>
+        <div class="sensor-bar"><div class="sensor-bar-fill" style="width: ${s.bar}%; background: ${s.color};"></div></div>
+      </div>
+    `;
+          analogSensors.appendChild(div);
+        });
+      }
+      renderAnalogSensors();
+
+      // ============================================
+      // LIVE SENSOR UPDATES (Simulated)
+      // ============================================
+      function randomFluctuation(base, range) {
+        return (base + (Math.random() - 0.5) * range).toFixed(1);
+      }
+
+      setInterval(() => {
+        // Update analog sensors
+        analogData[0].value = randomFluctuation(1.8, 0.4) + " dS/m";
+        analogData[0].bar = 55 + Math.random() * 15;
+        analogData[1].value = randomFluctuation(6.5, 0.3);
+        analogData[1].bar = 60 + Math.random() * 10;
+        analogData[2].value = randomFluctuation(28.3, 2) + "°C";
+        analogData[2].bar = 50 + Math.random() * 15;
+        analogData[3].value = randomFluctuation(4.2, 0.8) + " m³/h";
+        analogData[3].bar = 60 + Math.random() * 20;
+        renderAnalogSensors();
+
+        // Update digital sensors (soil moisture fluctuates)
+        digitalData[0].value = Math.round(60 + Math.random() * 10) + "%";
+        digitalData[0].bar = parseInt(digitalData[0].value);
+        digitalData[1].value = Math.round(55 + Math.random() * 10) + "%";
+        digitalData[1].bar = parseInt(digitalData[1].value);
+        digitalData[6].value = Math.round(68 + Math.random() * 10) + "%";
+        digitalData[6].bar = parseInt(digitalData[6].value);
+        digitalData[7].value = Math.round(80 + Math.random() * 10) + "%";
+        digitalData[7].bar = parseInt(digitalData[7].value);
+        renderDigitalSensors();
+
+        // Update water meter
+        const waterMeter = document.getElementById("water-meter-val");
+        const wm = 1247 + Math.floor(Math.random() * 10);
+        waterMeter.textContent = wm.toLocaleString() + " m³";
+
+        // Update device temp
+        document.getElementById("device-temp").textContent =
+          Math.round(36 + Math.random() * 6) + "°C";
+
+        // Dashboard quick stats
+        const qsWater = document.getElementById("qs-water");
+        if (qsWater) {
+          qsWater.textContent = (
+            2800 + Math.floor(Math.random() * 100)
+          ).toLocaleString();
+        }
+      }, 3000);
+
+      // ============================================
+      // TAB 2: DASHBOARD — Programs
+      // ============================================
+      const programList = document.getElementById("program-list");
+      const programs = [
+        {
+          name: "Zone A - Tomatoes",
+          detail: "3 shifts · 06:00, 12:00, 18:00",
+          status: "Running",
+          running: true,
+        },
+        {
+          name: "Zone B - Peppers",
+          detail: "2 shifts · 07:00, 15:00",
+          status: "Scheduled",
+          running: false,
+        },
+        {
+          name: "Zone C - Cucumbers",
+          detail: "4 shifts · Every 4h",
+          status: "Running",
+          running: true,
+        },
+        {
+          name: "Zone D - Herbs",
+          detail: "1 shift · 08:00",
+          status: "Idle",
+          running: false,
+        },
+        {
+          name: "Zone E - Drip Line 1",
+          detail: "2 shifts · 06:30, 14:30",
+          status: "Running",
+          running: true,
+        },
+        {
+          name: "Zone F - Drip Line 2",
+          detail: "2 shifts · 07:30, 15:30",
+          status: "Scheduled",
+          running: false,
+        },
+        {
+          name: "Zone G - Greenhouse",
+          detail: "3 shifts · Climate-based",
+          status: "Running",
+          running: true,
+        },
+        {
+          name: "Zone H - Nursery",
+          detail: "1 shift · 09:00",
+          status: "Idle",
+          running: false,
+        },
+      ];
+
+      function renderPrograms() {
+        programList.innerHTML = "";
+        programs.forEach((p, i) => {
+          const div = document.createElement("div");
+          div.className = `program-item ${p.running ? "running" : ""}`;
+          const statusColor = p.running
+            ? "var(--accent-green)"
+            : p.status === "Scheduled"
+              ? "var(--accent-blue)"
+              : "var(--text-muted)";
+          const statusBg = p.running
+            ? "var(--accent-green-dim)"
+            : p.status === "Scheduled"
+              ? "var(--accent-blue-dim)"
+              : "var(--bg-glass)";
+          div.innerHTML = `
+      <div class="program-num">${i + 1}</div>
+      <div class="program-info">
+        <div class="program-name">${p.name}</div>
+        <div class="program-detail">${p.detail}</div>
+      </div>
+      <span class="program-status" style="background: ${statusBg}; color: ${statusColor};">${p.status}</span>
+    `;
+          programList.appendChild(div);
+        });
+      }
+      renderPrograms();
+
+      // ============================================
+      // TAB 2: DASHBOARD — Gauges
+      // ============================================
+      const gaugeGrid = document.getElementById("gauge-grid");
+      const gauges = [
+        { label: "Soil Moisture", value: 64, unit: "%", color: "#34d399" },
+        {
+          label: "EC Level",
+          value: 1.8,
+          unit: "dS/m",
+          color: "#f59e0b",
+          max: 3,
+        },
+        {
+          label: "pH Level",
+          value: 6.5,
+          unit: "pH",
+          color: "#60a5fa",
+          max: 14,
+        },
+        {
+          label: "Temperature",
+          value: 28,
+          unit: "°C",
+          color: "#f87171",
+          max: 50,
+        },
+      ];
+
+      function renderGauges() {
+        gaugeGrid.innerHTML = "";
+        gauges.forEach((g) => {
+          const max = g.max || 100;
+          const pct = (g.value / max) * 100;
+          const radius = 38;
+          const circumference = 2 * Math.PI * radius;
+          const dashOffset = circumference - (pct / 100) * circumference;
+
+          const div = document.createElement("div");
+          div.className = "gauge-item";
+          div.innerHTML = `
+      <div class="gauge-circle">
+        <svg width="90" height="90" viewBox="0 0 90 90">
+          <circle cx="45" cy="45" r="${radius}" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="6"/>
+          <circle cx="45" cy="45" r="${radius}" fill="none" stroke="${g.color}" stroke-width="6"
+            stroke-dasharray="${circumference}" stroke-dashoffset="${dashOffset}"
+            stroke-linecap="round" style="transition: stroke-dashoffset 1s ease;"/>
+        </svg>
+        <div style="display: flex; flex-direction: column; align-items: center;">
+          <span class="gauge-val" style="color: ${g.color}">${g.value}</span>
+          <span class="gauge-unit">${g.unit}</span>
+        </div>
+      </div>
+      <div class="gauge-label">${g.label}</div>
+    `;
+          gaugeGrid.appendChild(div);
+        });
+      }
+      renderGauges();
+
+      // Animate gauge values
+      setInterval(() => {
+        gauges[0].value = Math.round(60 + Math.random() * 10);
+        gauges[1].value = parseFloat((1.5 + Math.random() * 0.6).toFixed(1));
+        gauges[2].value = parseFloat((6.2 + Math.random() * 0.6).toFixed(1));
+        gauges[3].value = Math.round(26 + Math.random() * 6);
+        renderGauges();
+      }, 4000);
+
+      // ============================================
+      // TAB 2: DASHBOARD — Alerts
+      // ============================================
+      const alertsList = document.getElementById("alerts-list");
+      const alerts = [
+        {
+          icon: "⚠️",
+          title: "Low pressure detected",
+          desc: "Zone C pressure dropped below 1.5 bar",
+          time: "2m ago",
+          borderColor: "var(--accent-orange)",
+        },
+        {
+          icon: "✅",
+          title: "Program 1 completed",
+          desc: "Zone A irrigation finished — 420L delivered",
+          time: "15m ago",
+          borderColor: "var(--accent-green)",
+        },
+        {
+          icon: "🔔",
+          title: "Dosing tank low",
+          desc: "Channel B fertilizer tank at 18% — refill recommended",
+          time: "1h ago",
+          borderColor: "var(--accent-orange)",
+        },
+        {
+          icon: "🌧️",
+          title: "Rain detected",
+          desc: "Irrigation paused automatically for Zone D",
+          time: "2h ago",
+          borderColor: "var(--accent-blue)",
+        },
+        {
+          icon: "📊",
+          title: "Weekly report ready",
+          desc: "Water usage down 12% vs. last week",
+          time: "5h ago",
+          borderColor: "var(--accent-purple)",
+        },
+      ];
+
+      function renderAlerts() {
+        alertsList.innerHTML = "";
+        alerts.forEach((a) => {
+          const div = document.createElement("div");
+          div.className = "alert-item";
+          div.style.borderLeftColor = a.borderColor;
+          div.innerHTML = `
+      <div class="alert-icon">${a.icon}</div>
+      <div class="alert-content">
+        <div class="alert-title">${a.title}</div>
+        <div class="alert-desc">${a.desc}</div>
+      </div>
+      <div class="alert-time">${a.time}</div>
+    `;
+          alertsList.appendChild(div);
+        });
+      }
+      renderAlerts();
+
+      // ============================================
+      // TAB 2: DASHBOARD — Water Usage Chart
+      // ============================================
+      const waterChart = document.getElementById("water-chart");
+      const waterData = [65, 78, 45, 82, 71, 55, 68];
+      const waterColors = [
+        "#34d399",
+        "#2dd4bf",
+        "#60a5fa",
+        "#34d399",
+        "#2dd4bf",
+        "#60a5fa",
+        "#34d399",
+      ];
+
+      function renderWaterChart() {
+        waterChart.innerHTML = "";
+        const max = Math.max(...waterData);
+        waterData.forEach((val, i) => {
+          const bar = document.createElement("div");
+          bar.className = "mini-bar";
+          bar.style.height = (val / max) * 100 + "%";
+          bar.style.background = `linear-gradient(180deg, ${waterColors[i]}, ${waterColors[i]}44)`;
+          bar.title = `${val * 40}L`;
+          waterChart.appendChild(bar);
+        });
+      }
+      renderWaterChart();
+
+      // ============================================
+      // TAB 2: DASHBOARD — Dosing Recipes
+      // ============================================
+      const recipeVisual = document.getElementById("recipe-visual");
+      const recipes = [
+        { name: "NPK Base", amount: "2.4 L/h", color: "#34d399", width: 80 },
+        { name: "Potassium+", amount: "1.2 L/h", color: "#60a5fa", width: 50 },
+        {
+          name: "Calcium Nitrate",
+          amount: "0.8 L/h",
+          color: "#fbbf24",
+          width: 35,
+        },
+        {
+          name: "Acid (pH Down)",
+          amount: "0.3 L/h",
+          color: "#f87171",
+          width: 15,
+        },
+      ];
+
+      function renderRecipes() {
+        recipeVisual.innerHTML = "";
+        recipes.forEach((r) => {
+          const div = document.createElement("div");
+          div.className = "recipe-item";
+          div.innerHTML = `
+      <div class="recipe-color" style="background: ${r.color};"></div>
+      <div class="recipe-info">
+        <div class="recipe-name">${r.name}</div>
+        <div class="recipe-amount">${r.amount}</div>
+      </div>
+      <div class="recipe-bar-container">
+        <div class="recipe-bar-fill" style="width: ${r.width}%; background: ${r.color};"></div>
+      </div>
+    `;
+          recipeVisual.appendChild(div);
+        });
+      }
+      renderRecipes();
+
+      // ============================================
+      // TAB 2: DASHBOARD — Remote Control
+      // ============================================
+      function toggleRemote(btn) {
+        btn.classList.toggle("active-ctrl");
+      }
+
+      function animateDashboard() {
+        // Re-render charts with animation
+        setTimeout(renderWaterChart, 200);
+        setTimeout(renderGauges, 400);
+      }
+
+      // ============================================
+      // TAB 3: FLOW — Node Animation
+      // ============================================
+      function animateFlowNodes() {
+        const nodes = document.querySelectorAll(".flow-node");
+        nodes.forEach((node, i) => {
+          node.classList.remove("visible");
+          setTimeout(() => {
+            node.classList.add("visible");
+          }, i * 150);
+        });
+      }
+
+      // Animate on load if flow tab is visible
+      setTimeout(animateFlowNodes, 500);
+
+      // Auto-cycle active node
+      let currentFlowNode = 0;
+      const flowNodeKeys = [
+        "field",
+        "sensors",
+        "controller",
+        "cellular",
+        "cloud",
+        "farmer",
+        "commands",
+        "execution",
+        "results",
+      ];
+
+      function cycleFlowNodes() {
+        const flowPanel = document.getElementById("panel-flow");
+        if (!flowPanel.classList.contains("active")) return;
+
+        const nodes = document.querySelectorAll(".flow-node");
+        nodes.forEach((n) => n.classList.remove("active-node"));
+
+        if (nodes[currentFlowNode]) {
+          nodes[currentFlowNode].classList.add("active-node");
+        }
+
+        currentFlowNode = (currentFlowNode + 1) % nodes.length;
+      }
+
+      setInterval(cycleFlowNodes, 2500);
+
+      // ============================================
+      // TAB 3: FLOW — Detail Panel
+      // ============================================
+      const flowDetails = {
+        field: {
+          title: "🌾 Farm Field",
+          text: "Your crops are continuously monitored. Soil moisture probes at different depths track water availability. Weather stations capture temperature, humidity, wind, and rainfall. This data feeds directly into the GrowSphere FLEX controller for intelligent decision-making.",
+          specs: [
+            { val: "12.5", label: "Hectares" },
+            { val: "8", label: "Zones" },
+            { val: "24/7", label: "Monitoring" },
+            { val: "3", label: "Crop Types" },
+          ],
+        },
+        sensors: {
+          title: "📡 Sensor Network",
+          text: "The FLEX supports 8 digital inputs and 4 analog inputs. Connect soil moisture probes, rain sensors, pressure switches, flow meters, EC & pH sensors, and temperature probes. All readings are sampled in real-time and used for automated irrigation decisions.",
+          specs: [
+            { val: "8", label: "Digital Inputs" },
+            { val: "4", label: "Analog Inputs" },
+            { val: "EC/pH", label: "Chemistry" },
+            { val: "< 1s", label: "Response Time" },
+          ],
+        },
+        controller: {
+          title: "🎛️ FLEX Controller",
+          text: "The heart of the system. GrowSphere FLEX manages up to 16 DC valve outputs, 4 dosing channels, 1 main valve, and 1 pump. It runs 8 irrigation programs with up to 8 shifts and 4 start times each. Supports time-based and quantity-based irrigation with Bulk, Spread, and Proportional dosing methods.",
+          specs: [
+            { val: "16", label: "Valve Outputs" },
+            { val: "4", label: "Dosing Channels" },
+            { val: "8", label: "Programs" },
+            { val: "Solar/AC", label: "Power" },
+          ],
+        },
+        cellular: {
+          title: "📶 Cellular Connectivity",
+          text: "Built-in 4G LTE cellular modem ensures your controller stays connected even in remote locations. No Wi-Fi required. Data is encrypted and transmitted securely to the GrowSphere cloud platform.",
+          specs: [
+            { val: "4G", label: "Network" },
+            { val: "LTE", label: "Protocol" },
+            { val: "256-bit", label: "Encryption" },
+            { val: "99.9%", label: "Uptime" },
+          ],
+        },
+        cloud: {
+          title: "☁️ GrowSphere Cloud",
+          text: "The GrowSphere Workspace is your command center. Access real-time monitoring, performance reports, smart alerts, and AI-powered crop advisory — all from a simple, intuitive web interface. Full traceability of every irrigation and fertigation event.",
+          specs: [
+            { val: "AI", label: "Crop Advisor" },
+            { val: "Real-time", label: "Monitoring" },
+            { val: "Full", label: "Traceability" },
+            { val: "24/7", label: "Access" },
+          ],
+        },
+        farmer: {
+          title: "📱 Remote Access",
+          text: "Monitor and control your irrigation from anywhere — your phone, tablet, or laptop. Get instant notifications about system alerts, completed programs, and AI recommendations. Never miss a critical event on your farm.",
+          specs: [
+            { val: "📱", label: "Mobile" },
+            { val: "💻", label: "Desktop" },
+            { val: "🔔", label: "Push Alerts" },
+            { val: "🌍", label: "Anywhere" },
+          ],
+        },
+        commands: {
+          title: "🎯 Remote Commands",
+          text: "Start or stop irrigation programs, adjust dosing recipes, change schedules, and respond to alerts — all remotely. The commands are transmitted securely via cellular back to the FLEX controller for immediate execution.",
+          specs: [
+            { val: "Start/Stop", label: "Irrigation" },
+            { val: "Adjust", label: "Dosing" },
+            { val: "Modify", label: "Schedules" },
+            { val: "Instant", label: "Execution" },
+          ],
+        },
+        execution: {
+          title: "💧 Irrigation Execution",
+          text: "The FLEX controller precisely opens valves, runs pumps, and delivers fertigation doses according to the active program or manual command. Water meters and dosing meters ensure accurate delivery.",
+          specs: [
+            { val: "16", label: "Valves" },
+            { val: "1", label: "Pump" },
+            { val: "4", label: "Dosing Meters" },
+            { val: "1", label: "Water Meter" },
+          ],
+        },
+        results: {
+          title: "🌿 Optimized Growth",
+          text: "The result: consistent, high-quality yields with less water, less fertilizer, and less manual work. Full performance reports provide traceability and help you continuously improve your farming operations.",
+          specs: [
+            { val: "+24%", label: "Yield Gain" },
+            { val: "-32%", label: "Water Saved" },
+            { val: "-28%", label: "Fertilizer Saved" },
+            { val: "-60%", label: "Manual Labor" },
+          ],
+        },
+      };
+
+      function showFlowDetail(key) {
+        const detail = flowDetails[key];
+        if (!detail) return;
+
+        const titleEl = document.getElementById("flow-detail-title");
+        const textEl = document.getElementById("flow-detail-text");
+        const specsEl = document.getElementById("flow-detail-specs");
+
+        titleEl.textContent = detail.title;
+        textEl.textContent = detail.text;
+
+        specsEl.innerHTML = "";
+        if (detail.specs) {
+          detail.specs.forEach((s) => {
+            const spec = document.createElement("div");
+            spec.className = "flow-spec";
+            spec.innerHTML = `
+        <div class="flow-spec-val">${s.val}</div>
+        <div class="flow-spec-label">${s.label}</div>
+      `;
+            specsEl.appendChild(spec);
+          });
+        }
+
+        // Highlight active node
+        document
+          .querySelectorAll(".flow-node")
+          .forEach((n) => n.classList.remove("active-node"));
+        const activeNode = document.querySelector(
+          `.flow-node[data-flow="${key}"]`,
+        );
+        if (activeNode) activeNode.classList.add("active-node");
+
+        // Scroll to detail
+        document
+          .getElementById("flow-detail")
+          .scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+
+      // ============================================
+      // INITIAL ANIMATION — Flow nodes visible on first load
+      // ============================================
+      document.addEventListener("DOMContentLoaded", () => {
+        // Make flow nodes visible immediately if flow tab is active
+        const flowPanel = document.getElementById("panel-flow");
+        if (flowPanel.classList.contains("active")) {
+          animateFlowNodes();
+        }
+      });
+    </script>
+  </body>
+</html>
