@@ -53,14 +53,20 @@
 <div class="scene" id="simScreen">
   <div class="sky"></div>
   <div class="sun"></div>
+
+  <!-- Clouds at different parallax depths -->
   <div class="cloud c1"></div>
   <div class="cloud c2"></div>
   <div class="cloud c3"></div>
+  <div class="cloud c4"></div>
+  <div class="cloud c5"></div>
+
+  <!-- Birds -->
   <div class="bird b1">🕊️</div>
   <div class="bird b2">🕊️</div>
   <div class="bird b3">🕊️</div>
-  <div class="grass"></div>
-  <div class="ground"></div>
+
+  <!-- LEVEL LAYERS will be drawn in SVG for perfect alignment -->
 
   <div class="title-bar">
     <div class="logo">💧</div>
@@ -84,6 +90,13 @@
 
   <svg class="main-svg" id="svg" viewBox="-60 -40 1320 780" preserveAspectRatio="xMidYMid meet">
     <defs>
+      <pattern id="patTerrain" x="0" y="0" width="48" height="48" patternUnits="userSpaceOnUse" patternTransform="translate(0, 516)">
+        <image href="tiles/Terrain tile.png" x="0" y="0" width="48" height="48" preserveAspectRatio="none" style="image-rendering:pixelated"/>
+      </pattern>
+      <pattern id="patGrassTop" x="0" y="0" width="48" height="24" patternUnits="userSpaceOnUse" patternTransform="translate(0, 492)">
+        <image href="tiles/grass .png" x="0" y="0" width="48" height="24" preserveAspectRatio="none" style="image-rendering:pixelated"/>
+      </pattern>
+
       <linearGradient id="pipeG" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0%" stop-color="#a0adb3"/><stop offset="30%" stop-color="#b8c4ca"/><stop offset="70%" stop-color="#a0adb3"/><stop offset="100%" stop-color="#8e9aa0"/>
       </linearGradient>
@@ -93,13 +106,14 @@
       <linearGradient id="waterFlow" x1="0" y1="0" x2="1" y2="0">
         <stop offset="0%" stop-color="#3498db"/><stop offset="50%" stop-color="#5dade2"/><stop offset="100%" stop-color="#3498db"/>
       </linearGradient>
-      <linearGradient id="stemGrad" x1="0" y1="1" x2="0" y2="0">
-        <stop offset="0%" stop-color="#3d7228"/><stop offset="100%" stop-color="#5fa83a"/>
-      </linearGradient>
       <filter id="sh"><feDropShadow dx="1" dy="2" stdDeviation="3" flood-opacity="0.2"/></filter>
       <filter id="shSm"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-opacity="0.15"/></filter>
-      <filter id="glow"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      <filter id="glow"><feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#2ecc71"/></filter>
     </defs>
+
+    <!-- PERFECTLY ALIGNED TILE TERRAIN -->
+    <rect x="-60" y="516" width="1320" height="264" fill="url(#patTerrain)"/>
+    <rect x="-60" y="492" width="1320" height="24" fill="url(#patGrassTop)"/>
 
     <!-- WATER TANK -->
     <g filter="url(#sh)">
@@ -109,8 +123,8 @@
         <animate attributeName="height" values="109;104;109" dur="3.5s" repeatCount="indefinite"/>
       </rect>
       <rect x="24" y="232" width="112" height="14" rx="5" fill="#90a4ae" stroke="#78909c" stroke-width="1"/>
-      <rect x="50" y="390" width="10" height="60" rx="3" fill="#78909c"/>
-      <rect x="100" y="390" width="10" height="60" rx="3" fill="#78909c"/>
+      <rect x="50" y="390" width="10" height="110" rx="3" fill="#78909c"/>
+      <rect x="100" y="390" width="10" height="110" rx="3" fill="#78909c"/>
       <text x="80" y="225" text-anchor="middle" font-family="Inter" font-size="12" font-weight="800" fill="#546e7a">WATER</text>
       <text x="80" y="345" text-anchor="middle" font-size="22">💧</text>
     </g>
@@ -131,11 +145,11 @@
       </circle>
     </g>
 
-    <!-- Pipes -->
-    <path d="M 130 345 L 180 345" stroke="url(#pipeG)" stroke-width="8" stroke-linecap="round" fill="none"/>
-    <path d="M 130 345 L 180 345" stroke="#3498db" stroke-width="4" stroke-linecap="round" fill="none" stroke-dasharray="8 5" class="wfh" id="p1"/>
-    <path d="M 255 345 L 470 345" stroke="url(#pipeG)" stroke-width="8" stroke-linecap="round" fill="none"/>
-    <path d="M 255 345 L 470 345" stroke="#3498db" stroke-width="4" stroke-linecap="round" fill="none" stroke-dasharray="8 5" class="wfh" id="p2"/>
+    <!-- Pipes (PIXEL ART STYLE) -->
+    <path d="M 130 345 L 180 345" stroke="#bdc3c7" stroke-width="8" fill="none" style="shape-rendering: crispEdges;"/>
+    <path d="M 130 345 L 180 345" stroke="#3498db" stroke-width="4" fill="none" stroke-dasharray="8 6" class="wfh" id="p1" style="shape-rendering: crispEdges;"/>
+    <path d="M 255 345 L 503 345" stroke="#bdc3c7" stroke-width="8" fill="none" style="shape-rendering: crispEdges;"/>
+    <path d="M 255 345 L 503 345" stroke="#3498db" stroke-width="4" fill="none" stroke-dasharray="8 6" class="wfh" id="p2" style="shape-rendering: crispEdges;"/>
 
     <!-- WATER METER -->
     <g filter="url(#shSm)">
@@ -220,21 +234,21 @@
       <animate attributeName="stroke-dashoffset" values="8;0" dur="1s" repeatCount="indefinite"/>
     </path>
 
-    <!-- PIPE DOWN -->
-    <path d="M 501 345 L 501 395" stroke="url(#pipeG)" stroke-width="7" stroke-linecap="round" fill="none"/>
-    <path d="M 501 345 L 501 395" stroke="#3498db" stroke-width="3.5" stroke-linecap="round" fill="none" stroke-dasharray="6 4" class="wfv" id="p3"/>
+    <!-- PIPE DOWN (PIXEL ART STYLE) -->
+    <path d="M 501 341 L 501 395" stroke="#bdc3c7" stroke-width="8" fill="none" style="shape-rendering: crispEdges;"/>
+    <path d="M 501 341 L 501 395" stroke="#3498db" stroke-width="4" fill="none" stroke-dasharray="8 6" class="wfv" id="p3" style="shape-rendering: crispEdges;"/>
 
-    <!-- VALVE RAIL -->
-    <g filter="url(#shSm)">
-      <rect x="310" y="393" width="530" height="10" rx="4" fill="#b0bec5" stroke="#90a4ae" stroke-width="1.5"/>
-      <rect x="330" y="389" width="5" height="18" rx="1.5" fill="#90a4ae"/>
-      <rect x="460" y="389" width="5" height="18" rx="1.5" fill="#90a4ae"/>
-      <rect x="590" y="389" width="5" height="18" rx="1.5" fill="#90a4ae"/>
-      <rect x="720" y="389" width="5" height="18" rx="1.5" fill="#90a4ae"/>
-      <rect x="820" y="389" width="5" height="18" rx="1.5" fill="#90a4ae"/>
+    <!-- VALVE RAIL (PIXEL ART STYLE) -->
+    <g>
+      <rect x="310" y="393" width="530" height="12" fill="#bdc3c7" stroke="#7f8c8d" stroke-width="2" style="shape-rendering: crispEdges;" />
+      <rect x="330" y="389" width="8" height="20" fill="#95a5a6" stroke="#7f8c8d" stroke-width="2" style="shape-rendering: crispEdges;" />
+      <rect x="460" y="389" width="8" height="20" fill="#95a5a6" stroke="#7f8c8d" stroke-width="2" style="shape-rendering: crispEdges;" />
+      <rect x="590" y="389" width="8" height="20" fill="#95a5a6" stroke="#7f8c8d" stroke-width="2" style="shape-rendering: crispEdges;" />
+      <rect x="720" y="389" width="8" height="20" fill="#95a5a6" stroke="#7f8c8d" stroke-width="2" style="shape-rendering: crispEdges;" />
+      <rect x="820" y="389" width="8" height="20" fill="#95a5a6" stroke="#7f8c8d" stroke-width="2" style="shape-rendering: crispEdges;" />
     </g>
-    <path d="M 340 398 L 830 398" stroke="url(#pipeG)" stroke-width="5" fill="none" stroke-linecap="round"/>
-    <path d="M 340 398 L 830 398" stroke="#3498db" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-dasharray="7 4" class="wfh" id="pRail"/>
+    <!-- Pixelated water flow inside the pipe -->
+    <path d="M 314 399 L 836 399" stroke="#3498db" stroke-width="4" fill="none" stroke-dasharray="8 6" class="wfh" id="pRail" style="shape-rendering: crispEdges;" />
 
     <!-- ZONES -->
     <g id="zones"></g>

@@ -51,26 +51,14 @@ body{font-family:'Inter',sans-serif;background:#0a1628}
 .sun{position:absolute;top:22px;right:90px;width:70px;height:70px;background:radial-gradient(circle,#fffde7 15%,#fff9c4 30%,#ffd54f 55%,rgba(255,213,79,0) 70%);border-radius:50%;box-shadow:0 0 80px rgba(255,213,79,0.5),0 0 160px rgba(255,213,79,0.15);animation:sunPulse 4s ease-in-out infinite}
 @keyframes sunPulse{0%,100%{box-shadow:0 0 80px rgba(255,213,79,0.5),0 0 160px rgba(255,213,79,0.15)}50%{box-shadow:0 0 100px rgba(255,213,79,0.6),0 0 200px rgba(255,213,79,0.2)}}
 
-/* Richer clouds with depth */
-.cloud{position:absolute;background:rgba(255,255,255,0.85);border-radius:50px;box-shadow:0 4px 20px rgba(0,0,0,0.06)}
-.cloud::before,.cloud::after{content:'';position:absolute;background:rgba(255,255,255,0.9);border-radius:50%}
-.c1{width:110px;height:32px;top:36px;left:10%;animation:drift 50s linear infinite}
-.c1::before{width:46px;height:46px;top:-20px;left:20px}
-.c1::after{width:38px;height:38px;top:-14px;left:55px}
-.c2{width:85px;height:26px;top:72px;left:50%;animation:drift 65s linear infinite;animation-delay:-22s}
-.c2::before{width:34px;height:34px;top:-16px;left:14px}
-.c2::after{width:28px;height:28px;top:-11px;left:42px}
-.c3{width:65px;height:20px;top:50px;left:75%;animation:drift 55s linear infinite;animation-delay:-10s;opacity:0.5}
-.c3::before{width:26px;height:26px;top:-12px;left:10px}
-.c3::after{width:20px;height:20px;top:-8px;left:30px}
-@keyframes drift{0%{transform:translateX(-200px)}100%{transform:translateX(100vw)}}
-
-/* Textured soil with layers */
-.ground{position:absolute;bottom:0;left:0;right:0;height:42%;background:linear-gradient(180deg,#8b7d5e 0%,#7a6d4e 8%,#6d5e3f 30%,#5c4e32 100%)}
-.ground::before{content:'';position:absolute;top:0;left:0;right:0;height:8px;background:repeating-linear-gradient(90deg,rgba(0,0,0,0.05) 0px,rgba(0,0,0,0.05) 2px,transparent 2px,transparent 12px)}
-
-/* Lush grass strip */
-.grass{position:absolute;bottom:42%;left:0;right:0;height:16px;background:linear-gradient(180deg,#5fa83a,#4a8830,#3d7228);z-index:2;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+/* ===== CLOUDS — 5 layers of parallax depth ===== */
+.cloud{position:absolute;background-repeat:no-repeat;background-size:contain;background-position:center;image-rendering:pixelated}
+.c1{width:220px;height:120px;top:30px;left:5%;animation:drift 55s linear infinite;background-image:url('tiles/cloud big.png')}
+.c2{width:160px;height:85px;top:70px;left:45%;animation:drift 70s linear infinite;animation-delay:-20s;background-image:url('tiles/cloud.png')}
+.c3{width:100px;height:55px;top:48px;left:72%;animation:drift 60s linear infinite;animation-delay:-10s;background-image:url('tiles/small clouds.png')}
+.c4{width:180px;height:100px;top:15px;left:28%;animation:drift 80s linear infinite;animation-delay:-35s;background-image:url('tiles/cloud big.png');opacity:0.5;transform:scaleX(-1)}
+.c5{width:120px;height:65px;top:85px;left:80%;animation:drift 45s linear infinite;animation-delay:-5s;background-image:url('tiles/cloud.png');opacity:0.6}
+@keyframes drift{0%{transform:translateX(-250px)}100%{transform:translateX(100vw)}}
 
 /* Birds */
 .bird{position:absolute;z-index:5;font-size:10px;opacity:0.5}

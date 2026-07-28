@@ -134,23 +134,28 @@ function build(){
   for(let i=0;i<N;i++){
     const x=360+i*58,railY=398,active=on[i];
     
-    // --- VALVE ASSEMBLY ---
+    // --- VALVE ASSEMBLY (PIXEL ART STYLE) ---
     const vg=ns('g');vg.style.cursor='pointer';
     vg.onclick=()=>{on[i]=!on[i];build();};
     
+    // Valve body shadow
     const vbShadow=ns('rect');
-    setA(vbShadow,{x:x-12,y:railY-21,width:24,height:24,rx:'5',fill:'rgba(0,0,0,0.15)'});
+    setA(vbShadow,{x:x-12,y:railY-21,width:24,height:24,fill:'rgba(0,0,0,0.15)', style:'shape-rendering:crispEdges;'});
     vg.appendChild(vbShadow);
+    
+    // Valve body (square)
     const vb=ns('rect');
-    setA(vb,{x:x-11,y:railY-22,width:22,height:22,rx:'4',fill:active?'#2980b9':'#7f8c8d',stroke:active?'#1a5276':'#566573','stroke-width':'2'});
+    setA(vb,{x:x-11,y:railY-22,width:22,height:22,fill:active?'#2980b9':'#7f8c8d',stroke:active?'#1a5276':'#566573','stroke-width':'2', style:'shape-rendering:crispEdges;'});
     vg.appendChild(vb);
     
-    const vc=ns('circle');
-    setA(vc,{cx:x,cy:railY-16,r:'6',fill:active?'#3498db':'#95a5a6',stroke:active?'#2471a3':'#7f8c8d','stroke-width':'1.5'});
+    // Valve center (square)
+    const vc=ns('rect');
+    setA(vc,{x:x-6,y:railY-21,width:12,height:12,fill:active?'#3498db':'#95a5a6',stroke:active?'#2471a3':'#7f8c8d','stroke-width':'2', style:'shape-rendering:crispEdges;'});
     vg.appendChild(vc);
     
-    const led=ns('circle');
-    setA(led,{cx:x,cy:railY-16,r:'2.5',fill:active?'#2ecc71':'#bdc3c7'});
+    // Status LED (square)
+    const led=ns('rect');
+    setA(led,{x:x-2,y:railY-17,width:4,height:4,fill:active?'#2ecc71':'#bdc3c7', style:'shape-rendering:crispEdges;'});
     if(active){
       led.setAttribute('filter','url(#glow)');
       const an=ns('animate');setA(an,{attributeName:'opacity',values:'1;0.3;1',dur:'1.5s',repeatCount:'indefinite'});led.appendChild(an);
@@ -162,36 +167,31 @@ function build(){
     lbl.textContent='V'+(i+1);vg.appendChild(lbl);
     g.appendChild(vg);
     
-    // --- DROP PIPE ---
+    // --- DROP PIPE (PIXEL ART STYLE) ---
     const endY = 490;
     const ppSh=ns('line');
-    setA(ppSh,{x1:x+1,y1:railY+7,x2:x+1,y2:endY+1,stroke:'rgba(0,0,0,0.12)','stroke-width':'5','stroke-linecap':'round'});
+    setA(ppSh,{x1:x+2,y1:railY+7,x2:x+2,y2:endY+1,stroke:'rgba(0,0,0,0.12)','stroke-width':'4', style:'shape-rendering:crispEdges;'});
     g.appendChild(ppSh);
     
     const pp=ns('line');
-    setA(pp,{x1:x,y1:railY+6,x2:x,y2:endY,stroke:active?'url(#pipeG)':'#c5cdd3','stroke-width':'4','stroke-linecap':'round'});
+    setA(pp,{x1:x,y1:railY+6,x2:x,y2:endY,stroke:'#bdc3c7','stroke-width':'4', style:'shape-rendering:crispEdges;'});
     g.appendChild(pp);
     
     if(active){
       const wf=ns('line');
-      setA(wf,{x1:x,y1:railY+6,x2:x,y2:endY,stroke:'url(#waterFlow)','stroke-width':'2.5','stroke-linecap':'round','stroke-dasharray':'5 4'});
+      setA(wf,{x1:x,y1:railY+6,x2:x,y2:endY,stroke:'#3498db','stroke-width':'2','stroke-dasharray':'4 4', style:'shape-rendering:crispEdges;'});
       wf.style.animation='flowDown 0.6s linear infinite';wf.style.animationDelay=(i*0.12)+'s';
       g.appendChild(wf);
     }
     
-    // --- SHADOW FOR PIXEL TILE ---
-    const soilY=515;
-    const shadow=ns('ellipse');
-    setA(shadow,{cx:x,cy:soilY+8,rx:'26',ry:'6',fill:'rgba(0,0,0,0.25)'});
-    g.appendChild(shadow);
-    
-    // --- IRRIGATION VISUALS ---
+    const soilY = 510;
+    // --- IRRIGATION VISUALS (PIXEL ART STYLE) ---
     if (irrType === 'Sprinkler') {
       const spBase=ns('rect');
-      setA(spBase,{x:x-3,y:endY-2,width:6,height:6,rx:'1',fill:active?'#2980b9':'#95a5a6'});
+      setA(spBase,{x:x-3,y:endY-2,width:6,height:6,fill:active?'#2980b9':'#95a5a6', style:'shape-rendering:crispEdges;'});
       g.appendChild(spBase);
-      const spHead=ns('circle');
-      setA(spHead,{cx:x,cy:endY-4,r:'3',fill:active?'#3498db':'#aab7b8'});
+      const spHead=ns('rect');
+      setA(spHead,{x:x-3,y:endY-6,width:6,height:4,fill:active?'#3498db':'#aab7b8', style:'shape-rendering:crispEdges;'});
       g.appendChild(spHead);
 
       if(active){
@@ -210,45 +210,46 @@ function build(){
           g.appendChild(arc);
         }
       }
-    } else if (irrType === 'Flood') {
+    } else if (irrType === 'Drip') {
       const dl=ns('line');
-      setA(dl,{x1:x-24,y1:endY,x2:x+24,y2:endY,stroke:active?'#2980b9':'#bdc3c7','stroke-width':'3','stroke-linecap':'round'});
+      setA(dl,{x1:x,y1:railY+2,x2:x,y2:endY,stroke:'#7f8c8d','stroke-width':'3', style:'shape-rendering:crispEdges;'});
       g.appendChild(dl);
-
+      const wet=ns('ellipse');
+      // Position puddle exactly at ground level
+      setA(wet,{cx:x,cy:soilY,rx:active?'22':'12',ry:active?'6':'4',fill:'#3498db',opacity:active?'0.35':'0.15',filter:'url(#shSm)'});
+      if(active) wet.style.animation='floodPulse 2s ease-in-out infinite';
+      g.appendChild(wet);
       if(active){
-        const pool1=ns('ellipse');
-        setA(pool1,{cx:x,cy:endY+12,rx:'26',ry:'7',fill:'#3498db',opacity:'0.5'});
-        pool1.style.animation='floodPulse 1.5s ease-in-out infinite';
-        g.appendChild(pool1);
-        const pool2=ns('ellipse');
-        setA(pool2,{cx:x,cy:endY+20,rx:'22',ry:'5',fill:'#5dade2',opacity:'0.3'});
-        pool2.style.animation='floodPulse 1.5s ease-in-out infinite';
-        pool2.style.animationDelay='0.4s';
-        g.appendChild(pool2);
+        const d=ns('rect');
+        setA(d,{x:x-2,y:railY+15,width:4,height:4,fill:'#3498db', style:'shape-rendering:crispEdges;'});
+        d.style.animation='flowDown 0.8s ease-in infinite';
+        g.appendChild(d);
       }
     } else {
+      // Flood
+      const pool=ns('ellipse');
+      // Position pool perfectly at ground level
+      setA(pool,{cx:x,cy:soilY+4,rx:'32',ry:'8',fill:'#3498db',opacity:active?'0.4':'0.1',filter:'url(#shSm)'});
+      if (active) pool.style.animation='floodPulse 3s ease-in-out infinite';
+      g.appendChild(pool);
+      
       const dl=ns('line');
-      setA(dl,{x1:x-22,y1:endY,x2:x+22,y2:endY,stroke:active?'#27ae60':'#bdc3c7','stroke-width':'2.5','stroke-linecap':'round'});
+      setA(dl,{x1:x-22,y1:endY,x2:x+22,y2:endY,stroke:active?'#27ae60':'#bdc3c7','stroke-width':'3', style:'shape-rendering:crispEdges;'});
       g.appendChild(dl);
 
       if(active){
         for(let d=0;d<3;d++){
-          const nz=ns('circle');
-          setA(nz,{cx:x-16+d*16,cy:endY,r:'2',fill:'#27ae60'});
+          const nz=ns('rect');
+          setA(nz,{x:x-18+d*16,y:endY-2,width:4,height:4,fill:'#27ae60', style:'shape-rendering:crispEdges;'});
           g.appendChild(nz);
           
-          const dr=ns('circle');setA(dr,{cx:x-16+d*16,cy:endY+4,r:'2',fill:'#3498db',opacity:'0'});
-          const a1=ns('animate');setA(a1,{attributeName:'cy',values:(endY+4)+';'+(endY+22),dur:'1.2s',repeatCount:'indefinite',begin:(d*0.3)+'s'});dr.appendChild(a1);
+          const dr=ns('rect');setA(dr,{x:x-18+d*16,y:endY+4,width:4,height:4,fill:'#3498db',opacity:'0', style:'shape-rendering:crispEdges;'});
+          const a1=ns('animate');setA(a1,{attributeName:'y',values:(endY+4)+';'+(soilY+4),dur:'1.2s',repeatCount:'indefinite',begin:(d*0.3)+'s'});dr.appendChild(a1);
           const a2=ns('animate');setA(a2,{attributeName:'opacity',values:'0;0.8;0',dur:'1.2s',repeatCount:'indefinite',begin:(d*0.3)+'s'});dr.appendChild(a2);
-          const a3=ns('animate');setA(a3,{attributeName:'r',values:'2;1',dur:'1.2s',repeatCount:'indefinite',begin:(d*0.3)+'s'});dr.appendChild(a3);
           g.appendChild(dr);
         }
-        const wet=ns('ellipse');
-        setA(wet,{cx:x,cy:endY+22,rx:'18',ry:'4',fill:'#2e86c1',opacity:'0.35'});
-        g.appendChild(wet);
       }
     }
-
     // --- VECTOR ART CROP ---
     const plantGroup = ns('g');
     if(active){
@@ -272,16 +273,7 @@ function build(){
 
     g.appendChild(plantGroup);
 
-    // Crop name label
-    const zl=ns('text');
-    setA(zl,{x:x,y:soilY+28,'text-anchor':'middle','font-family':'Inter','font-size':'8','font-weight':'700',fill:active?'#d4c89a':'#9e8e6e'});
-    zl.textContent=names[i];
-    g.appendChild(zl);
-    
-    const zs=ns('text');
-    setA(zs,{x:x,y:soilY+39,'text-anchor':'middle','font-family':'Space Mono','font-size':'6','font-weight':'700',fill:active?'#2ecc71':'#888'});
-    zs.textContent=active?'● WATERING':'○ IDLE';
-    g.appendChild(zs);
+    // Removed floating text labels from the dirt
   }
 
   const flowing=on.some(z=>z);
@@ -303,41 +295,55 @@ function build(){
 // Function to draw crops using provided PNG assets
 function drawCrop(group, x, y, type, stage, active) {
   const op = active ? 1 : 0.6;
-  const filter = active ? 'url(#shSm)' : '';
+  const filter = active ? 'url(#glow)' : '';
   
+  // Base plant image and size based on stage (scaled down for neatness)
   let imgSrc = '';
-  
-  if (stage === 1) imgSrc = 'grow  (1).png';
-  else if (stage === 2) imgSrc = 'grow  (2).png';
-  else if (stage === 3) imgSrc = 'grow  (3).png';
-  else if (stage === 4) imgSrc = 'grow 2 (3).png';
-  else {
-    // Stage 5 (Fully grown fruit)
-    if (type === 'corn') imgSrc = 'Corn.png';
-    else if (type === 'blueberry') imgSrc = 'Blueberry.png';
-    else if (type === 'watermelon') imgSrc = 'Watermelon.png';
-  }
+  let size = 48; 
 
-  // Draw image
+  if (stage === 1) { imgSrc = 'grow  (1).png'; size = 20; }
+  else if (stage === 2) { imgSrc = 'grow  (2).png'; size = 28; }
+  else if (stage === 3) { imgSrc = 'grow  (3).png'; size = 38; }
+  else if (stage >= 4) { imgSrc = 'grow 2 (3).png'; size = 48; } // Fully grown plant base
+
+  // Draw base plant
   const img = ns('image');
-  // We'll set width/height to 64px, anchored at bottom-center.
-  // x-axis: center is x, so x - 32
-  // y-axis: bottom is y, so y - 64
   setA(img, {
     href: imgSrc,
-    x: x - 32,
-    y: y - 64,
-    width: 64,
-    height: 64,
+    x: x - (size / 2),
+    y: y - size,
+    width: size,
+    height: size,
     preserveAspectRatio: 'xMidYMax meet',
     opacity: op,
     filter: filter
   });
-  
-  // To avoid blurry scaling if these are small pixel art pngs:
   img.style.imageRendering = 'pixelated';
-  
   group.appendChild(img);
+
+  // Stage 5: Overlay the fruit on top of the grown plant
+  if (stage === 5) {
+    let fruitSrc = '';
+    if (type === 'corn') fruitSrc = 'Corn.png';
+    else if (type === 'blueberry') fruitSrc = 'Blueberry.png';
+    else if (type === 'watermelon') fruitSrc = 'Watermelon.png';
+
+    const fruitSize = 32;
+    const fruit = ns('image');
+    setA(fruit, {
+      href: fruitSrc,
+      x: x - (fruitSize / 2),
+      // Position the fruit completely above the plant (not overlapping)
+      y: y - size - fruitSize + 2, // +2 so it rests exactly on the very top pixel of the leaves
+      width: fruitSize,
+      height: fruitSize,
+      preserveAspectRatio: 'xMidYMid meet',
+      opacity: op,
+      filter: filter
+    });
+    fruit.style.imageRendering = 'pixelated';
+    group.appendChild(fruit);
+  }
 }
 
 let baseWater=1247;
