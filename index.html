@@ -3,96 +3,54 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GrowSphere™ FLEX — How It Works</title>
+<title>GrowSphere™ FLEX — Smart Irrigation Game</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;overflow:hidden}
-body{font-family:'Inter',sans-serif;background:#8b7d5e}
-
-.scene{width:100vw;height:100vh;position:relative;overflow:hidden}
-
-/* Sky */
-.sky{position:absolute;inset:0;
-  background:linear-gradient(180deg,#6cb4ee 0%,#9dd0f5 30%,#c5e4fa 50%,#dce8d0 62%,#a9b88a 70%,#8b7d5e 76%,#6d5e3f 100%);
-}
-
-/* Sun */
-.sun{position:absolute;top:30px;right:100px;width:60px;height:60px;
-  background:radial-gradient(circle,#fff9c4 25%,#ffd54f 55%,transparent 68%);
-  border-radius:50%;
-  box-shadow:0 0 50px rgba(255,213,79,0.4),0 0 100px rgba(255,213,79,0.15);
-}
-
-/* Clouds */
-.cloud{position:absolute;background:white;border-radius:50px;opacity:0.6}
-.cloud::before,.cloud::after{content:'';position:absolute;background:white;border-radius:50%}
-.c1{width:100px;height:30px;top:40px;left:10%;animation:drift 45s linear infinite}
-.c1::before{width:42px;height:42px;top:-18px;left:18px}
-.c1::after{width:34px;height:34px;top:-12px;left:50px}
-.c2{width:80px;height:24px;top:75px;left:45%;animation:drift 60s linear infinite;animation-delay:-20s}
-.c2::before{width:32px;height:32px;top:-14px;left:12px}
-.c2::after{width:26px;height:26px;top:-10px;left:38px}
-@keyframes drift{0%{transform:translateX(-150px)}100%{transform:translateX(100vw)}}
-
-/* Ground */
-.ground{position:absolute;bottom:0;left:0;right:0;height:42%;
-  background:linear-gradient(180deg,#8b7d5e 0%,#7a6d4e 15%,#6d5e3f 100%);
-}
-
-/* Grass */
-.grass{position:absolute;bottom:42%;left:0;right:0;height:14px;
-  background:linear-gradient(180deg,#5a8a3c,#4a7832);z-index:2;
-}
-
-/* SVG */
-.main-svg{position:absolute;inset:0;z-index:10}
-
-/* Title */
-.title-bar{position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:20;
-  background:rgba(255,255,255,0.93);backdrop-filter:blur(10px);
-  padding:10px 26px;border-radius:10px;
-  box-shadow:0 2px 20px rgba(0,0,0,0.12);
-  display:flex;align-items:center;gap:12px;
-  border:1px solid rgba(255,255,255,0.5)}
-.title-bar .logo{width:34px;height:34px;background:#2ecc71;border-radius:8px;
-  display:grid;place-items:center;font-size:17px;color:white;
-  box-shadow:0 2px 8px rgba(46,204,113,0.3)}
-.title-bar h1{font-size:17px;font-weight:800;color:#1a1a1a;letter-spacing:-0.3px}
-.title-bar h1 span{color:#2ecc71}
-.title-bar .sep{width:1px;height:26px;background:#e0e0e0}
-.title-bar .tag{font-size:9px;color:#888;font-weight:600;letter-spacing:2.5px;text-transform:uppercase}
-
-/* Controls */
-.controls{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);z-index:20;
-  display:flex;gap:8px}
-.ctrl{padding:10px 24px;border-radius:8px;border:2px solid;
-  font-family:'Inter',sans-serif;font-size:12px;font-weight:700;
-  cursor:pointer;transition:all 0.15s;text-transform:uppercase;letter-spacing:1px;
-  backdrop-filter:blur(8px);box-shadow:0 2px 10px rgba(0,0,0,0.1)}
-.ctrl.go{border-color:#2ecc71;color:#2ecc71;background:rgba(255,255,255,0.88)}
-.ctrl.go:hover,.ctrl.go.active{background:#2ecc71;color:white}
-.ctrl.st{border-color:#e74c3c;color:#e74c3c;background:rgba(255,255,255,0.88)}
-.ctrl.st:hover{background:#e74c3c;color:white}
-
-/* Callout labels */
-.callout{position:absolute;z-index:15;
-  background:rgba(255,255,255,0.92);backdrop-filter:blur(6px);
-  padding:5px 10px;border-radius:6px;
-  box-shadow:0 2px 12px rgba(0,0,0,0.1);
-  border:1px solid rgba(255,255,255,0.5);
-  font-size:9px;font-weight:600;color:#555;pointer-events:none;white-space:nowrap}
-.callout .val{font-family:'Space Mono',monospace;font-weight:700;color:#2ecc71;display:block;margin-top:1px;font-size:11px}
-.callout.blue .val{color:#3498db}
-
-/* SVG animations */
-@keyframes flowRight{from{stroke-dashoffset:16}to{stroke-dashoffset:0}}
-@keyframes flowDown{from{stroke-dashoffset:12}to{stroke-dashoffset:0}}
-@keyframes pumpSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-</style>
+<link rel="stylesheet" href="game.css">
 </head>
 <body>
-<div class="scene">
+
+<!-- ===== SCREEN 1: INPUT ===== -->
+<div class="screen" id="inputScreen">
+  <div class="input-card">
+    <div class="logo-row">
+      <div class="logo-icon">💧</div>
+      <h2>GrowSphere™ <span>FLEX</span></h2>
+    </div>
+    <div class="subtitle">Smart Irrigation Simulator</div>
+    <div class="form-group">
+      <label>Farmer Name</label>
+      <input type="text" id="farmerName" placeholder="Enter your name...">
+    </div>
+    <div class="form-group">
+      <label>Field Acreage</label>
+      <input type="number" id="acreage" placeholder="e.g. 5" min="1" max="100">
+    </div>
+    <div class="form-group">
+      <label>Type of Irrigation</label>
+      <div class="irrigation-options">
+        <div class="irr-opt selected" onclick="selectIrrType(this,'Drip')">
+          <div class="irr-icon">💧</div>
+          <div class="irr-name">Drip</div>
+          <div class="irr-desc">90% efficiency</div>
+        </div>
+        <div class="irr-opt" onclick="selectIrrType(this,'Sprinkler')">
+          <div class="irr-icon">🌧️</div>
+          <div class="irr-name">Sprinkler</div>
+          <div class="irr-desc">75% efficiency</div>
+        </div>
+        <div class="irr-opt" onclick="selectIrrType(this,'Flood')">
+          <div class="irr-icon">🌊</div>
+          <div class="irr-name">Flood</div>
+          <div class="irr-desc">50% efficiency</div>
+        </div>
+      </div>
+    </div>
+    <button class="btn-start" onclick="startGame()">🚀 Start Irrigation</button>
+  </div>
+</div>
+
+<!-- ===== SIMULATION SCENE (Background) ===== -->
+<div class="scene" id="simScreen">
   <div class="sky"></div>
   <div class="sun"></div>
   <div class="cloud c1"></div>
@@ -104,37 +62,35 @@ body{font-family:'Inter',sans-serif;background:#8b7d5e}
     <div class="logo">💧</div>
     <h1>GrowSphere™ <span>FLEX</span></h1>
     <div class="sep"></div>
-    <div class="tag">How It Works</div>
+    <div class="tag">Smart Irrigation</div>
   </div>
 
-  <div class="controls">
-    <button class="ctrl go active" id="btnGo" onclick="startSystem()">▶ Start Irrigation</button>
-    <button class="ctrl st" onclick="stopSystem()">⏹ Stop All</button>
+  <div class="sim-hud">
+    <div class="hud-pill"><div class="dot"></div><span class="farmer-name" id="hudName">Farmer</span></div>
+    <div class="hud-pill">🌾 <span id="hudAcre">5 Acres</span></div>
+    <div class="hud-pill">💧 <span id="hudType">Drip</span></div>
+    <div class="hud-pill timer" id="simTimer">00:05</div>
   </div>
 
-  <!-- Callout labels positioned over the scene -->
-  <div class="callout" style="top:30%;left:3%">Water Source<span class="val blue">1,247 m³</span></div>
-  <div class="callout" style="top:44%;left:13%">Pump<span class="val">● Running</span></div>
-  <div class="callout" style="top:18%;left:33%">Fertigation Tanks<span class="val">N · P · K · pH</span></div>
-  <div class="callout blue" style="top:8%;right:22%">GrowSphere Cloud<span class="val blue">☁️ Connected</span></div>
-  <div class="callout" style="top:8%;right:5%">Remote Access<span class="val blue">📱 Live</span></div>
+  <div class="callout" style="top:30%;left:3%">Water Source<span class="val blue" id="coWater">1,247 m³</span></div>
+  <div class="callout" style="top:44%;left:13%">Pump<span class="val" id="coPump" style="color:#95a5a6">○ Idle</span></div>
+  <div class="callout" style="top:18%;left:33%">Fertigation Tanks<span class="val" id="coNutrients" style="color:#95a5a6">○ Standby</span></div>
+  <div class="callout blue" style="top:8%;right:22%">GrowSphere Cloud<span class="val blue" id="coCloud">☁️ Connected</span></div>
+  <div class="callout" style="top:8%;right:5%">Remote Access<span class="val blue" id="coRemote">📱 Live</span></div>
 
   <svg class="main-svg" id="svg" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid meet">
     <defs>
       <linearGradient id="pipeG" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#8e9aa0"/>
-        <stop offset="50%" stop-color="#a0adb3"/>
-        <stop offset="100%" stop-color="#8e9aa0"/>
+        <stop offset="0%" stop-color="#8e9aa0"/><stop offset="50%" stop-color="#a0adb3"/><stop offset="100%" stop-color="#8e9aa0"/>
       </linearGradient>
       <linearGradient id="tankG" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#5dade2"/>
-        <stop offset="100%" stop-color="#2e86c1"/>
+        <stop offset="0%" stop-color="#5dade2"/><stop offset="100%" stop-color="#2e86c1"/>
       </linearGradient>
       <filter id="sh"><feDropShadow dx="1" dy="2" stdDeviation="3" flood-opacity="0.18"/></filter>
       <filter id="shSm"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-opacity="0.12"/></filter>
     </defs>
 
-    <!-- ===== WATER TANK ===== -->
+    <!-- WATER TANK -->
     <g filter="url(#sh)">
       <rect x="30" y="240" width="100" height="150" rx="8" fill="#b0bec5" stroke="#78909c" stroke-width="2.5"/>
       <rect x="36" y="275" width="88" height="109" rx="4" fill="url(#tankG)" opacity="0.65">
@@ -148,7 +104,7 @@ body{font-family:'Inter',sans-serif;background:#8b7d5e}
       <text x="80" y="345" text-anchor="middle" font-size="22">💧</text>
     </g>
 
-    <!-- ===== PUMP ===== -->
+    <!-- PUMP -->
     <g filter="url(#sh)">
       <rect x="180" y="320" width="75" height="60" rx="10" fill="#546e7a" stroke="#37474f" stroke-width="2.5"/>
       <circle cx="217" cy="338" r="18" fill="#37474f" stroke="#263238" stroke-width="2"/>
@@ -164,50 +120,38 @@ body{font-family:'Inter',sans-serif;background:#8b7d5e}
       </circle>
     </g>
 
-    <!-- Pipe: Tank → Pump -->
+    <!-- Pipes -->
     <path d="M 130 345 L 180 345" stroke="url(#pipeG)" stroke-width="8" stroke-linecap="round" fill="none"/>
-    <path d="M 130 345 L 180 345" stroke="#3498db" stroke-width="4" stroke-linecap="round" fill="none"
-          stroke-dasharray="8 5" class="wfh" id="p1"/>
-
-    <!-- Pipe: Pump → Meter → Controller area -->
+    <path d="M 130 345 L 180 345" stroke="#3498db" stroke-width="4" stroke-linecap="round" fill="none" stroke-dasharray="8 5" class="wfh" id="p1"/>
     <path d="M 255 345 L 470 345" stroke="url(#pipeG)" stroke-width="8" stroke-linecap="round" fill="none"/>
-    <path d="M 255 345 L 470 345" stroke="#3498db" stroke-width="4" stroke-linecap="round" fill="none"
-          stroke-dasharray="8 5" class="wfh" id="p2"/>
+    <path d="M 255 345 L 470 345" stroke="#3498db" stroke-width="4" stroke-linecap="round" fill="none" stroke-dasharray="8 5" class="wfh" id="p2"/>
 
-    <!-- ===== WATER METER ===== -->
+    <!-- WATER METER -->
     <g filter="url(#shSm)">
       <rect x="340" y="325" width="55" height="30" rx="5" fill="white" stroke="#bdc3c7" stroke-width="1.5"/>
       <text x="367" y="340" text-anchor="middle" font-family="Space Mono" font-size="9" font-weight="700" fill="#2c3e50" id="meterVal">1,247 m³</text>
       <text x="367" y="351" text-anchor="middle" font-family="Inter" font-size="6" font-weight="700" fill="#95a5a6" letter-spacing="1">METER</text>
     </g>
 
-    <!-- ===== DOSING TANKS ===== -->
+    <!-- DOSING TANKS -->
     <g filter="url(#shSm)">
       <text x="380" y="195" text-anchor="middle" font-family="Inter" font-size="9" font-weight="800" fill="#7f8c8d" letter-spacing="2">FERTIGATION TANKS</text>
-
-      <!-- N -->
       <rect x="300" y="208" width="38" height="65" rx="5" fill="#d5f5e3" stroke="#2ecc71" stroke-width="2"/>
       <rect x="305" y="235" width="28" height="34" rx="3" fill="#2ecc71" opacity="0.35"/>
       <text x="319" y="225" text-anchor="middle" font-family="Inter" font-size="12" font-weight="800" fill="#27ae60">N</text>
       <path d="M 319 273 L 319 345" stroke="#2ecc71" stroke-width="2" stroke-dasharray="4 3" opacity="0.5">
         <animate attributeName="stroke-dashoffset" values="7;0" dur="0.8s" repeatCount="indefinite"/>
       </path>
-
-      <!-- P -->
       <rect x="345" y="208" width="38" height="65" rx="5" fill="#d6eaf8" stroke="#3498db" stroke-width="2"/>
       <rect x="350" y="240" width="28" height="29" rx="3" fill="#3498db" opacity="0.35"/>
       <text x="364" y="225" text-anchor="middle" font-family="Inter" font-size="12" font-weight="800" fill="#2e86c1">P</text>
       <path d="M 364 273 L 364 345" stroke="#3498db" stroke-width="2" stroke-dasharray="4 3" opacity="0.5">
         <animate attributeName="stroke-dashoffset" values="7;0" dur="0.8s" repeatCount="indefinite"/>
       </path>
-
-      <!-- K -->
       <rect x="390" y="208" width="38" height="65" rx="5" fill="#fdebd0" stroke="#e67e22" stroke-width="2"/>
       <rect x="395" y="245" width="28" height="24" rx="3" fill="#e67e22" opacity="0.35"/>
       <text x="409" y="225" text-anchor="middle" font-family="Inter" font-size="12" font-weight="800" fill="#d35400">K</text>
       <path d="M 409 273 L 409 345" stroke="#e67e22" stroke-width="2" stroke-dasharray="4 3" opacity="0.4"/>
-
-      <!-- pH -->
       <rect x="435" y="208" width="38" height="65" rx="5" fill="#e8daef" stroke="#8e44ad" stroke-width="2"/>
       <rect x="440" y="228" width="28" height="41" rx="3" fill="#8e44ad" opacity="0.35"/>
       <text x="454" y="222" text-anchor="middle" font-family="Inter" font-size="10" font-weight="800" fill="#7d3c98">pH−</text>
@@ -216,37 +160,21 @@ body{font-family:'Inter',sans-serif;background:#8b7d5e}
       </path>
     </g>
 
-    <!-- ===== CONTROLLER (real product image) ===== -->
+    <!-- CONTROLLER -->
     <g filter="url(#sh)">
-      <!-- Pole (extended up for solar panel) -->
-      <rect x="497" y="88" width="8" height="360" rx="3" fill="#b0bec5" stroke="#90a4ae" stroke-width="1"/>
-
-      <!-- Solar panel on top of pole -->
-      <g transform="translate(501, 90)">
-        <!-- Panel frame (tilted) -->
-        <g transform="rotate(-15)">
-          <rect x="-35" y="-22" width="70" height="44" rx="3" fill="#2c3e50" stroke="#1a252f" stroke-width="1.5"/>
-          <!-- Solar cells - row 1 -->
-          <rect x="-31" y="-18" width="28" height="17" rx="1" fill="#2980b9" opacity="0.9"/>
-          <rect x="1" y="-18" width="28" height="17" rx="1" fill="#2980b9" opacity="0.9"/>
-          <!-- Solar cells - row 2 -->
-          <rect x="-31" y="2" width="28" height="17" rx="1" fill="#2573a7" opacity="0.9"/>
-          <rect x="1" y="2" width="28" height="17" rx="1" fill="#2573a7" opacity="0.9"/>
-          <!-- Grid lines -->
-          <line x1="-31" y1="0" x2="29" y2="0" stroke="#1a252f" stroke-width="0.5" opacity="0.5"/>
-          <line x1="0" y1="-18" x2="0" y2="19" stroke="#1a252f" stroke-width="0.5" opacity="0.5"/>
-        </g>
-        <text x="0" y="34" text-anchor="middle" font-family="Inter" font-size="7" font-weight="700" fill="#7f8c8d">SOLAR</text>
-      </g>
-
-      <!-- Product image -->
+      <rect x="497" y="88" width="8" height="307" rx="3" fill="#b0bec5" stroke="#90a4ae" stroke-width="1"/>
+      <g transform="translate(501, 90)"><g transform="rotate(-15)">
+        <rect x="-35" y="-22" width="70" height="44" rx="3" fill="#2c3e50" stroke="#1a252f" stroke-width="1.5"/>
+        <rect x="-31" y="-18" width="28" height="17" rx="1" fill="#2980b9" opacity="0.9"/>
+        <rect x="1" y="-18" width="28" height="17" rx="1" fill="#2980b9" opacity="0.9"/>
+        <rect x="-31" y="2" width="28" height="17" rx="1" fill="#2573a7" opacity="0.9"/>
+        <rect x="1" y="2" width="28" height="17" rx="1" fill="#2573a7" opacity="0.9"/>
+        <line x1="-31" y1="0" x2="29" y2="0" stroke="#1a252f" stroke-width="0.5" opacity="0.5"/>
+        <line x1="0" y1="-18" x2="0" y2="19" stroke="#1a252f" stroke-width="0.5" opacity="0.5"/>
+      </g><text x="0" y="34" text-anchor="middle" font-family="Inter" font-size="7" font-weight="700" fill="#7f8c8d">SOLAR</text></g>
       <image href="flex.png" x="468" y="155" width="68" height="95" preserveAspectRatio="xMidYMid meet"/>
-
-      <!-- Antenna (on right side of controller) -->
       <line x1="530" y1="170" x2="540" y2="130" stroke="#90a4ae" stroke-width="2.5" stroke-linecap="round"/>
       <circle cx="540" cy="127" r="4" fill="#e74c3c"/>
-
-      <!-- Signal waves -->
       <circle cx="540" cy="127" r="8" fill="none" stroke="#3498db" stroke-width="1.2" opacity="0">
         <animate attributeName="r" values="8;30" dur="2s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values="0.5;0" dur="2s" repeatCount="indefinite"/>
@@ -257,19 +185,18 @@ body{font-family:'Inter',sans-serif;background:#8b7d5e}
       </circle>
     </g>
 
-    <!-- ===== CLOUD ===== -->
+    <!-- CLOUD -->
     <g filter="url(#shSm)">
       <rect x="680" y="55" width="140" height="60" rx="12" fill="rgba(255,255,255,0.9)" stroke="#3498db" stroke-width="1.5"/>
       <text x="750" y="78" text-anchor="middle" font-size="18">☁️</text>
       <text x="750" y="96" text-anchor="middle" font-family="Inter" font-size="9" font-weight="700" fill="#2c3e50">GrowSphere Cloud</text>
       <text x="750" y="108" text-anchor="middle" font-family="Inter" font-size="7" fill="#95a5a6">AI · Monitoring · Alerts</text>
     </g>
-    <!-- Signal to cloud -->
     <path d="M 545 127 Q 620 75, 680 85" fill="none" stroke="#3498db" stroke-width="2" stroke-dasharray="5 3" opacity="0.45">
       <animate attributeName="stroke-dashoffset" values="8;0" dur="1s" repeatCount="indefinite"/>
     </path>
 
-    <!-- ===== PHONE ===== -->
+    <!-- PHONE -->
     <g filter="url(#shSm)">
       <rect x="870" y="50" width="55" height="80" rx="10" fill="#2c3e50" stroke="#1a252f" stroke-width="2"/>
       <rect x="876" y="62" width="43" height="52" rx="4" fill="#3498db"/>
@@ -278,221 +205,81 @@ body{font-family:'Inter',sans-serif;background:#8b7d5e}
       <circle cx="897" cy="123" r="3.5" fill="#7f8c8d"/>
       <text x="897" y="42" text-anchor="middle" font-family="Inter" font-size="9" font-weight="700" fill="#546e7a">FARMER</text>
     </g>
-    <!-- Cloud to phone -->
     <path d="M 820 85 L 870 85" fill="none" stroke="#3498db" stroke-width="2" stroke-dasharray="5 3" opacity="0.45">
       <animate attributeName="stroke-dashoffset" values="8;0" dur="1s" repeatCount="indefinite"/>
     </path>
 
-    <!-- ===== PIPE: Controller down to rail ===== -->
+    <!-- PIPE DOWN -->
     <path d="M 501 345 L 501 395" stroke="url(#pipeG)" stroke-width="7" stroke-linecap="round" fill="none"/>
-    <path d="M 501 345 L 501 395" stroke="#3498db" stroke-width="3.5" stroke-linecap="round" fill="none"
-          stroke-dasharray="6 4" class="wfv" id="p3"/>
+    <path d="M 501 345 L 501 395" stroke="#3498db" stroke-width="3.5" stroke-linecap="round" fill="none" stroke-dasharray="6 4" class="wfv" id="p3"/>
 
-    <!-- ===== VALVE RAIL ===== -->
+    <!-- VALVE RAIL -->
     <g filter="url(#shSm)">
       <rect x="310" y="393" width="530" height="10" rx="4" fill="#b0bec5" stroke="#90a4ae" stroke-width="1.5"/>
-      <!-- Brackets -->
       <rect x="330" y="389" width="5" height="18" rx="1.5" fill="#90a4ae"/>
       <rect x="460" y="389" width="5" height="18" rx="1.5" fill="#90a4ae"/>
       <rect x="590" y="389" width="5" height="18" rx="1.5" fill="#90a4ae"/>
       <rect x="720" y="389" width="5" height="18" rx="1.5" fill="#90a4ae"/>
       <rect x="820" y="389" width="5" height="18" rx="1.5" fill="#90a4ae"/>
     </g>
-
-    <!-- Rail pipe -->
     <path d="M 340 398 L 830 398" stroke="url(#pipeG)" stroke-width="5" fill="none" stroke-linecap="round"/>
-    <path d="M 340 398 L 830 398" stroke="#3498db" stroke-width="2.5" fill="none" stroke-linecap="round"
-          stroke-dasharray="7 4" class="wfh" id="pRail"/>
+    <path d="M 340 398 L 830 398" stroke="#3498db" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-dasharray="7 4" class="wfh" id="pRail"/>
 
-    <!-- ===== ZONES (valves + pipes + crops) — built by JS ===== -->
+    <!-- ZONES -->
     <g id="zones"></g>
 
-    <!-- ===== SOIL SENSORS ===== -->
+    <!-- SOIL SENSORS -->
     <g>
-      <g transform="translate(450, 530)">
-        <line x1="0" y1="0" x2="0" y2="45" stroke="#78909c" stroke-width="2.5" stroke-linecap="round"/>
-        <circle cx="0" cy="47" r="5" fill="#e67e22" stroke="#d35400" stroke-width="1.5"/>
-        <text x="0" y="62" text-anchor="middle" font-family="Inter" font-size="7" font-weight="700" fill="#c9b896">SOIL MOISTURE</text>
+      <g transform="translate(430, 580)">
+        <line x1="0" y1="0" x2="0" y2="40" stroke="#78909c" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="0" cy="42" r="5" fill="#e67e22" stroke="#d35400" stroke-width="1.5"/>
+        <text x="0" y="56" text-anchor="middle" font-family="Inter" font-size="7" font-weight="700" fill="#c9b896">SOIL MOISTURE</text>
+        <text x="0" y="67" text-anchor="middle" font-family="Space Mono" font-size="7" font-weight="700" fill="#e67e22" id="probeMoisture">42% (Dry)</text>
       </g>
-      <g transform="translate(650, 540)">
+      <g transform="translate(710, 580)">
         <line x1="0" y1="0" x2="0" y2="40" stroke="#78909c" stroke-width="2.5" stroke-linecap="round"/>
         <circle cx="0" cy="42" r="5" fill="#e67e22" stroke="#d35400" stroke-width="1.5"/>
         <text x="0" y="56" text-anchor="middle" font-family="Inter" font-size="7" font-weight="700" fill="#c9b896">EC / pH PROBE</text>
+        <text x="0" y="67" text-anchor="middle" font-family="Space Mono" font-size="7" font-weight="700" fill="#3498db" id="probeEC">1.2 mS · pH 6.8</text>
       </g>
-      <!-- Sensor wires to controller -->
-      <path d="M 450 530 Q 460 490, 498 445" fill="none" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="3 2" opacity="0.35"/>
-      <path d="M 650 540 Q 620 490, 504 445" fill="none" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="3 2" opacity="0.35"/>
+      <!-- Underground sensor wires cleanly routed below plant roots -->
+      <path d="M 430 580 L 430 635 L 501 635 L 501 398" fill="none" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="3 2" opacity="0.4"/>
+      <path d="M 710 580 L 710 635 L 501 635" fill="none" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="3 2" opacity="0.4"/>
     </g>
-
-    <!-- SVG animation styles -->
-    <style>
-      @keyframes flowRight{from{stroke-dashoffset:16}to{stroke-dashoffset:0}}
-      @keyframes flowDown{from{stroke-dashoffset:12}to{stroke-dashoffset:0}}
-      @keyframes pumpSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-    </style>
   </svg>
+
+  <div class="fast-label">⚡ FAST FORWARD — SIMULATING IRRIGATION CYCLE</div>
 </div>
 
-<script>
-const N = 8;
-const on = [true, true, false, true, false, true, true, false];
-const crops = ['🌱','🌶️','🥒','🌿','🌾','🍅','🫑','🌻'];
-const names = ['Tomato','Pepper','Cucumber','Herbs','Wheat','Tomato B','Capsicum','Sunflower'];
+<!-- ===== SCREEN 3: RESULTS ===== -->
+<div class="screen hidden" id="resultScreen">
+  <div class="result-card">
+    <div class="confetti-icon">🎉</div>
+    <h1><span>Congratulations!</span></h1>
+    <div class="farmer-greet">Great job, <strong id="resName">Farmer</strong>! Here are your savings with <strong id="resIrrType">Drip</strong> irrigation.</div>
+    <div class="savings-grid">
+      <div class="saving-box">
+        <div class="s-icon">💧</div>
+        <div class="s-label">Monthly Water Saved</div>
+        <div class="s-value blue" id="resWater">30 L</div>
+      </div>
+      <div class="saving-box">
+        <div class="s-icon">💰</div>
+        <div class="s-label">Monthly Saving</div>
+        <div class="s-value green" id="resMonthlyCost">₹ 3,000</div>
+      </div>
+      <div class="saving-box full">
+        <div class="s-icon">🏆</div>
+        <div class="s-label">Yearly Saving</div>
+        <div class="s-value gold" id="resYearlyCost">₹ 36,000</div>
+        <div class="s-sub">Powered by GrowSphere™ FLEX Smart Irrigation</div>
+      </div>
+    </div>
+    <button class="btn-restart" onclick="restart()">🔄 Play Again</button>
+    <div class="gs-badge">💧 GrowSphere™ FLEX — Save Water, Save Money</div>
+  </div>
+</div>
 
-function setA(el,a){for(const[k,v]of Object.entries(a))el.setAttribute(k,v)}
-function ns(t){return document.createElementNS('http://www.w3.org/2000/svg',t)}
-
-function build() {
-  const g = document.getElementById('zones');
-  g.innerHTML = '';
-
-  for (let i = 0; i < N; i++) {
-    const x = 360 + i * 58;
-    const railY = 398;
-    const active = on[i];
-
-    // --- SOLENOID VALVE ---
-    const vg = ns('g'); vg.style.cursor = 'pointer';
-    vg.onclick = () => { on[i] = !on[i]; build(); };
-
-    // Valve body
-    const vb = ns('rect');
-    setA(vb,{x:x-11,y:railY-22,width:22,height:22,rx:'4',
-      fill:active?'#2980b9':'#7f8c8d',stroke:active?'#2471a3':'#5d6d7e','stroke-width':'2'});
-    vg.appendChild(vb);
-
-    // Valve top cap (the blue knob)
-    const vc = ns('circle');
-    setA(vc,{cx:x,cy:railY-16,r:'6',fill:active?'#3498db':'#95a5a6',stroke:active?'#2e86c1':'#7f8c8d','stroke-width':'1.5'});
-    vg.appendChild(vc);
-
-    // LED on valve
-    const led = ns('circle');
-    setA(led,{cx:x,cy:railY-16,r:'2.5',fill:active?'#2ecc71':'#bdc3c7'});
-    if(active){
-      const anim = ns('animate');
-      setA(anim,{attributeName:'opacity',values:'1;0.3;1',dur:'1.5s',repeatCount:'indefinite'});
-      led.appendChild(anim);
-    }
-    vg.appendChild(led);
-
-    // Label
-    const lbl = ns('text');
-    setA(lbl,{x:x,y:railY-28,'text-anchor':'middle','font-family':'Space Mono','font-size':'7','font-weight':'700',
-      fill:active?'#2980b9':'#95a5a6'});
-    lbl.textContent = 'V'+(i+1);
-    vg.appendChild(lbl);
-    g.appendChild(vg);
-
-    // --- DROP PIPE ---
-    const pipeLen = 110 + (i%3)*18;
-    const endY = railY + pipeLen;
-
-    // Grey pipe
-    const pp = ns('line');
-    setA(pp,{x1:x,y1:railY+6,x2:x,y2:endY,stroke:active?'#8e9aa0':'#c5cdd3','stroke-width':'4','stroke-linecap':'round'});
-    g.appendChild(pp);
-
-    // Water flow
-    if(active) {
-      const wf = ns('line');
-      setA(wf,{x1:x,y1:railY+6,x2:x,y2:endY,stroke:'#3498db','stroke-width':'2.5','stroke-linecap':'round','stroke-dasharray':'5 4'});
-      wf.style.animation = 'flowDown 0.6s linear infinite';
-      wf.style.animationDelay = (i*0.12)+'s';
-      g.appendChild(wf);
-    }
-
-    // --- DRIP EMITTER (horizontal line) ---
-    const dl = ns('line');
-    setA(dl,{x1:x-22,y1:endY,x2:x+22,y2:endY,stroke:active?'#27ae60':'#bdc3c7','stroke-width':'2.5','stroke-linecap':'round'});
-    g.appendChild(dl);
-
-    // --- WATER DROPS ---
-    if(active) {
-      for(let d=0;d<3;d++) {
-        const dr = ns('circle');
-        setA(dr,{cx:x-16+d*16,cy:endY+5,r:'2.5',fill:'#3498db',opacity:'0'});
-        const a1 = ns('animate');
-        setA(a1,{attributeName:'cy',values:(endY+5)+';'+(endY+22),dur:'1.3s',repeatCount:'indefinite',begin:(d*0.35)+'s'});
-        dr.appendChild(a1);
-        const a2 = ns('animate');
-        setA(a2,{attributeName:'opacity',values:'0;0.6;0',dur:'1.3s',repeatCount:'indefinite',begin:(d*0.35)+'s'});
-        dr.appendChild(a2);
-        g.appendChild(dr);
-      }
-    }
-
-    // --- PLANT ---
-    const plantY = endY - 5;
-
-    // Stem
-    const stem = ns('line');
-    setA(stem,{x1:x,y1:plantY,x2:x,y2:plantY-35,stroke:'#4a7832','stroke-width':'2.5','stroke-linecap':'round'});
-    g.appendChild(stem);
-
-    // Leaves
-    for(let lf=0;lf<3;lf++) {
-      const ly = plantY - 10 - lf*10;
-      const side = lf%2===0 ? -1 : 1;
-      const leaf = ns('ellipse');
-      setA(leaf,{cx:x+side*10,cy:ly,rx:active?'10':'6',ry:active?'5':'3',
-        fill:active?'#27ae60':'#a0a0a0',opacity:active?'0.75':'0.4',
-        transform:`rotate(${side*25} ${x+side*10} ${ly})`});
-      g.appendChild(leaf);
-    }
-
-    // Crop emoji
-    const ce = ns('text');
-    setA(ce,{x:x,y:plantY-42,'text-anchor':'middle','font-size':active?'18':'12'});
-    ce.textContent = crops[i];
-    g.appendChild(ce);
-
-    // Zone label
-    const zl = ns('text');
-    setA(zl,{x:x,y:endY+35,'text-anchor':'middle','font-family':'Inter','font-size':'8','font-weight':'700',
-      fill:active?'#c9b896':'#a09070'});
-    zl.textContent = names[i];
-    g.appendChild(zl);
-
-    // Status
-    const zs = ns('text');
-    setA(zs,{x:x,y:endY+46,'text-anchor':'middle','font-family':'Space Mono','font-size':'6','font-weight':'700',
-      fill:active?'#2ecc71':'#999'});
-    zs.textContent = active ? '● WATERING' : '○ IDLE';
-    g.appendChild(zs);
-  }
-
-  // Animate pipes
-  const flowing = on.some(z=>z);
-  document.querySelectorAll('.wfh').forEach(el=>{
-    el.style.animation = flowing ? 'flowRight 0.7s linear infinite' : 'none';
-    el.style.opacity = flowing ? '1' : '0.15';
-  });
-  document.querySelectorAll('.wfv').forEach(el=>{
-    el.style.animation = flowing ? 'flowDown 0.6s linear infinite' : 'none';
-    el.style.opacity = flowing ? '1' : '0.15';
-  });
-  document.getElementById('pumpBlade').style.animation = flowing ? 'pumpSpin 0.7s linear infinite' : 'none';
-}
-
-build();
-
-function startSystem() {
-  for(let i=0;i<N;i++) on[i]=true;
-  build();
-  document.getElementById('btnGo').classList.add('active');
-}
-function stopSystem() {
-  for(let i=0;i<N;i++) on[i]=false;
-  build();
-  document.getElementById('btnGo').classList.remove('active');
-}
-
-// Live meter
-setInterval(()=>{
-  const m=document.getElementById('meterVal');
-  if(m) m.textContent=(1247+Math.floor(Math.random()*10)).toLocaleString()+' m³';
-},4000);
-</script>
+<script src="game.js"></script>
 </body>
 </html>
