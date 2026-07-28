@@ -300,101 +300,44 @@ function build(){
   if(pLed) pLed.setAttribute('fill',flowing?'#2ecc71':'#95a5a6');
 }
 
-// Function to draw beautiful vector plants based on growth stage
+// Function to draw crops using provided PNG assets
 function drawCrop(group, x, y, type, stage, active) {
   const op = active ? 1 : 0.6;
   const filter = active ? 'url(#shSm)' : '';
-
-  if (stage === 1) { // Seed
-    const seed = ns('ellipse');
-    setA(seed, {cx:x, cy:y-2, rx:3, ry:2, fill:'#e67e22', opacity:op});
-    group.appendChild(seed);
-    return;
+  
+  let imgSrc = '';
+  
+  if (stage === 1) imgSrc = 'grow  (1).png';
+  else if (stage === 2) imgSrc = 'grow  (2).png';
+  else if (stage === 3) imgSrc = 'grow  (3).png';
+  else if (stage === 4) imgSrc = 'grow 2 (3).png';
+  else {
+    // Stage 5 (Fully grown fruit)
+    if (type === 'corn') imgSrc = 'Corn.png';
+    else if (type === 'blueberry') imgSrc = 'Blueberry.png';
+    else if (type === 'watermelon') imgSrc = 'Watermelon.png';
   }
 
-  if (type === 'corn') {
-    const h = (stage-1) * 16; 
-    const stem = ns('line');
-    setA(stem, {x1:x, y1:y, x2:x, y2:y-h, stroke:'#2ecc71', 'stroke-width':3, 'stroke-linecap':'round', opacity:op});
-    group.appendChild(stem);
-    
-    const numLeaves = stage * 2;
-    for(let l=0; l<numLeaves; l++){
-      const ly = y - 5 - (l*7);
-      if (ly < y-h) break;
-      const side = l%2===0 ? -1 : 1;
-      const leaf = ns('path');
-      setA(leaf, {d:`M ${x} ${ly} Q ${x+side*12} ${ly-8} ${x+side*18} ${ly+2} Q ${x+side*8} ${ly+4} ${x} ${ly}`, fill:'#27ae60', opacity:op, filter});
-      group.appendChild(leaf);
-    }
-    
-    if (stage >= 4) {
-      for(let c=0; c<(stage===5?2:1); c++){
-        const cy = y - 20 - c*15;
-        const side = c%2===0 ? 1 : -1;
-        const cob = ns('ellipse');
-        setA(cob, {cx:x+side*6, cy:cy, rx:4, ry:8, fill:'#f1c40f', transform:`rotate(${side*20} ${x+side*6} ${cy})`, opacity:op, filter});
-        group.appendChild(cob);
-      }
-    }
-  } 
-  else if (type === 'blueberry') {
-    const r = (stage-1) * 7;
-    
-    const bushBack = ns('circle');
-    setA(bushBack, {cx:x, cy:y-r+2, r:r, fill:'#1e8449', opacity:op, filter});
-    group.appendChild(bushBack);
-    
-    const bushFront = ns('circle');
-    setA(bushFront, {cx:x-r*0.2, cy:y-r*0.8, r:r*0.7, fill:'#2ecc71', opacity:op});
-    group.appendChild(bushFront);
-
-    if (stage >= 4) {
-      const bColor = stage === 5 ? '#3498db' : '#85c1e9';
-      const numBerries = stage === 5 ? 8 : 4;
-      for(let b=0; b<numBerries; b++){
-        const bx = x + Math.sin(b*45) * (r*0.6);
-        const by = (y-r) + Math.cos(b*45) * (r*0.6);
-        const berry = ns('circle');
-        setA(berry, {cx:bx, cy:by, r:2.5, fill:bColor, opacity:op});
-        group.appendChild(berry);
-      }
-    }
-  }
-  else if (type === 'watermelon') {
-    const spread = (stage-1) * 12;
-    
-    const vine = ns('path');
-    setA(vine, {d:`M ${x-spread} ${y-2} Q ${x} ${y-10} ${x+spread} ${y-2}`, fill:'none', stroke:'#229954', 'stroke-width':2.5, opacity:op});
-    group.appendChild(vine);
-    
-    const numLeaves = stage * 2;
-    for(let l=0; l<numLeaves; l++){
-      const lx = (x-spread) + (l * (spread*2 / numLeaves));
-      const leaf = ns('circle');
-      setA(leaf, {cx:lx, cy:y-4, r:4+(stage*0.5), fill:'#27ae60', opacity:op, filter});
-      group.appendChild(leaf);
-    }
-
-    if (stage >= 4) {
-      const mColor = stage === 5 ? '#196f3d' : '#abebc6';
-      const mSize = stage === 5 ? 8 : 4;
-      const melon1 = ns('ellipse');
-      setA(melon1, {cx:x-spread*0.5, cy:y-mSize+2, rx:mSize+2, ry:mSize, fill:mColor, opacity:op, filter});
-      group.appendChild(melon1);
-      
-      if (stage === 5) {
-        const melon2 = ns('ellipse');
-        setA(melon2, {cx:x+spread*0.6, cy:y-mSize+2, rx:mSize+2, ry:mSize, fill:mColor, opacity:op, filter});
-        group.appendChild(melon2);
-        
-        // Add stripes
-        const stripe = ns('path');
-        setA(stripe, {d:`M ${x-spread*0.5-mSize} ${y-mSize+2} Q ${x-spread*0.5} ${y-mSize-2} ${x-spread*0.5+mSize} ${y-mSize+2}`, fill:'none', stroke:'#2ecc71', 'stroke-width':1.5, opacity:op});
-        group.appendChild(stripe);
-      }
-    }
-  }
+  // Draw image
+  const img = ns('image');
+  // We'll set width/height to 64px, anchored at bottom-center.
+  // x-axis: center is x, so x - 32
+  // y-axis: bottom is y, so y - 64
+  setA(img, {
+    href: imgSrc,
+    x: x - 32,
+    y: y - 64,
+    width: 64,
+    height: 64,
+    preserveAspectRatio: 'xMidYMax meet',
+    opacity: op,
+    filter: filter
+  });
+  
+  // To avoid blurry scaling if these are small pixel art pngs:
+  img.style.imageRendering = 'pixelated';
+  
+  group.appendChild(img);
 }
 
 let baseWater=1247;
